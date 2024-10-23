@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-         node-version: '22' # Specify the Node.js version you want to use
+          node-version: "22" # Specify the Node.js version you want to use
 
       - name: Get cache key
         id: cache-keys
@@ -90,7 +90,7 @@ jobs:
       - name: Build Typechain and Foundry
         run: yarn build
 
-      - name: Run Forge and Hardhat Tests
+      - name: Run Forge Tests
         run: yarn test
         env:
           ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
@@ -118,7 +118,7 @@ jobs:
           version: nightly
           cache: true
 
-      - name: Generate Hardhat & Foundry Coverage Report
+      - name: Generate Foundry Coverage Report
         run: yarn coverage:report
         env:
           ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
@@ -135,17 +135,6 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Upload Hardhat Coverage Report to Codecov
-        uses: codecov/codecov-action@v4.4.1
-        with:
-          directory: coverage
-          file: lcov.info
-          flags: hardhat
-          fail_ci_if_error: true
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
   analyze:
     runs-on: ubuntu-latest
     steps:
@@ -155,7 +144,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-         node-version: '22' # Specify the Node.js version you want to use
+          node-version: "22" # Specify the Node.js version you want to use
 
       - name: Run Slither
         uses: crytic/slither-action@v0.4.0

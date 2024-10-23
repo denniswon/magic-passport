@@ -34,7 +34,7 @@ body:
     attributes:
       label: Environment
       description: Specify your development environment (e.g., compiler version, test framework).
-      placeholder: "Solidity v0.8.4, Hardhat v2.3.0"
+      placeholder: "Solidity v0.8.4, Foundry v0.2.0"
   - type: checkboxes
     attributes:
       label: Code of Conduct

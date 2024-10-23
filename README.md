@@ -1,6 +1,6 @@
-[![Biconomy](https://img.shields.io/badge/Made_with_%F0%9F%8D%8A_by-Biconomy-ff4e17?style=flat)](https://biconomy.io) [![License MIT](https://img.shields.io/badge/License-MIT-blue?&style=flat)](./LICENSE) [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-FFDB1C.svg)](https://hardhat.org/) [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFBD10.svg)](https://getfoundry.sh/)
+[![Biconomy](https://img.shields.io/badge/Made_with_%F0%9F%8D%8A_by-Biconomy-ff4e17?style=flat)](https://biconomy.io) [![License MIT](https://img.shields.io/badge/License-MIT-blue?&style=flat)](./LICENSE) [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFBD10.svg)](https://getfoundry.sh/)
 
-![Codecov Hardhat Coverage](https://img.shields.io/badge/90%25-green?style=flat&logo=codecov&label=Hardhat%20Coverage) ![Codecov Foundry Coverage](https://img.shields.io/badge/100%25-brightgreen?style=flat&logo=codecov&label=Foundry%20Coverage)
+![Codecov Foundry Coverage](https://img.shields.io/badge/100%25-brightgreen?style=flat&logo=codecov&label=Foundry%20Coverage)
 
 # Nexus - ERC-7579 Modular Smart Account Base 🚀
 
@@ -8,7 +8,7 @@
 
 This repository serves as a comprehensive foundation for smart contract projects, streamlining the development process with a focus on best practices, security, and efficiency.
 
-Documentation: (https://github.com/bcnmy/nexus/wiki)
+Documentation: (<https://github.com/bcnmy/nexus/wiki>)
 
 ## 📚 Table of Contents
 
@@ -26,7 +26,6 @@ Documentation: (https://github.com/bcnmy/nexus/wiki)
     - [🚀 Deploy Contracts](#-deploy-contracts)
     - [🎨 Lint Code](#-lint-code)
     - [🖌️ Auto-fix Linting Issues](#️-auto-fix-linting-issues)
-    - [🚀 Generating Storage Layout](#-generating-storage-layout)
   - [🔒 Security Audits](#-security-audits)
   - [🏆 Biconomy Champions League 🏆](#-biconomy-champions-league-)
     - [Champions Roster](#champions-roster)
@@ -67,7 +66,7 @@ Copy `.env.example` to `.env` and fill in your details.
 
 ## 🛠️ Essential Scripts
 
-Execute key operations for Foundry and Hardhat with these scripts. Append `:forge` or `:hardhat` to run them in the respective environment.
+Execute key operations for Foundry with these scripts. Append `:forge` to run them in the respective environment.
 
 ### 🏗️ Build Contracts
 
@@ -75,7 +74,7 @@ Execute key operations for Foundry and Hardhat with these scripts. Append `:forg
 yarn build
 ```
 
-Compiles contracts for both Foundry and Hardhat.
+Compiles contracts for Foundry.
 
 ### 🧪 Run Tests
 
@@ -112,7 +111,7 @@ Generate documentation from NatSpec comments.
 ### 🚀 Deploy Contracts
 
 ```bash
-yarn run deploy:hardhat --network hardhat
+yarn run deploy:forge
 ```
 
 Deploys contracts onto the blockchain network.
@@ -133,22 +132,12 @@ yarn lint:fix
 
 Automatically fixes linting problems found.
 
-### 🚀 Generating Storage Layout
-
-```bash
-yarn check
-```
-
-To generate reports of the storage layout for potential upgrades safety using `hardhat-storage-layout`.
-
-🔄 Add `:forge` or `:hardhat` to any script above to target only Foundry or Hardhat environment, respectively.
-
 ## 🔒 Security Audits
 
-| Auditor          | Date       | Final Report Link       |
-| ---------------- | ---------- | ----------------------- |
+| Auditor          | Date       | Final Report Link                                       |
+| ---------------- | ---------- | ------------------------------------------------------- |
 | CodeHawks-Cyfrin | 17-09-2024 | [View Report](./audits/CodeHawks-Cyfrin-17-09-2024.pdf) |
-| Firm Name        | DD-MM-YYYY | [View Report](./audits) |
+| Firm Name        | DD-MM-YYYY | [View Report](./audits)                                 |
 
 ## 🏆 Biconomy Champions League 🏆
 

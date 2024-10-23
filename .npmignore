@@ -1,8 +1,6 @@
 *.env
 *.secret
-hardhat.config.ts
 scripts
-test/hardhat
 artifacts
 cache
 out

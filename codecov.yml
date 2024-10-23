@@ -9,18 +9,13 @@
         },
     },
   "comment": { "layout": "header, diff, files, footer" },
-  "flags":
-    {
-      "foundry": { "paths": ["^contracts/.*"] },
-      "hardhat": { "paths": ["^contracts/.*"] },
-    },
-  "ignore":
-    [
+  "flags": { "foundry": { "paths": ["^contracts/.*"] } },
+  "ignore": [
       "(?s:scripts/[^\\/]*)\\Z",
       "(?s:contracts/mocks/[^\\/]*)\\Z",
       "(?s:test/[^\\/]*)\\Z",
       "^scripts/.*",
       "^test/.*",
-      "(?s:contracts/lib/local/[^\\/]*)\\Z" #assembly blocks
+      "(?s:contracts/lib/local/[^\\/]*)\\Z", #assembly blocks
     ],
 }
