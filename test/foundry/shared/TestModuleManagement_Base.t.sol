@@ -2,11 +2,11 @@
 pragma solidity ^0.8.27;
 
 import "../utils/Imports.sol";
-import "../utils/NexusTest_Base.t.sol";
+import "../utils/PassportTest_Base.t.sol";
 
 /// @title Base Test Contract for Module Management
 /// @notice Contains setup and shared functions for testing module management
-abstract contract TestModuleManagement_Base is NexusTest_Base {
+abstract contract TestModuleManagement_Base is PassportTest_Base {
     MockValidator public mockValidator;
     MockExecutor public mockExecutor;
     MockHandler public mockHandler;

@@ -9,22 +9,18 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { Execution } from "../types/DataTypes.sol";
 import { IExecutionHelperEventsAndErrors } from "../interfaces/base/IExecutionHelper.sol";
 import { ExecType, EXECTYPE_DEFAULT, EXECTYPE_TRY } from "../lib/ModeLib.sol";
 import { ExecLib } from "../lib/ExecLib.sol";
 
-/// @title Nexus - ExecutionHelper
-/// @notice Implements execution management within the Nexus suite, facilitating transaction execution strategies and
+/// @title Passport - ExecutionHelper
+/// @notice Implements execution management within the Passport suite, facilitating transaction execution strategies and
 /// error handling.
 /// @dev Provides mechanisms for direct and batched transactions with both committed and tentative execution strategies
 /// as per ERC-4337 and ERC-7579 standards.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 contract ExecutionHelper is IExecutionHelperEventsAndErrors {
@@ -144,11 +140,14 @@ contract ExecutionHelper is IExecutionHelperEventsAndErrors {
     /// @param execType The execution type, which can be DEFAULT (revert on failure) or TRY (return on failure).
     function _handleSingleExecution(bytes calldata executionCalldata, ExecType execType) internal {
         (address target, uint256 value, bytes calldata callData) = executionCalldata.decodeSingle();
-        if (execType == EXECTYPE_DEFAULT) _execute(target, value, callData);
-        else if (execType == EXECTYPE_TRY) {
+        if (execType == EXECTYPE_DEFAULT) {
+            _execute(target, value, callData);
+        } else if (execType == EXECTYPE_TRY) {
             (bool success, bytes memory result) = _tryExecute(target, value, callData);
             if (!success) emit TryExecuteUnsuccessful(callData, result);
-        } else revert UnsupportedExecType(execType);
+        } else {
+            revert UnsupportedExecType(execType);
+        }
     }
 
     /// @dev Executes a batch of transactions based on the specified execution type.
@@ -166,11 +165,14 @@ contract ExecutionHelper is IExecutionHelperEventsAndErrors {
     /// @param execType The execution type, which can be DEFAULT (revert on failure) or TRY (return on failure).
     function _handleDelegateCallExecution(bytes calldata executionCalldata, ExecType execType) internal {
         (address delegate, bytes calldata callData) = executionCalldata.decodeDelegateCall();
-        if (execType == EXECTYPE_DEFAULT) _executeDelegatecall(delegate, callData);
-        else if (execType == EXECTYPE_TRY) {
+        if (execType == EXECTYPE_DEFAULT) {
+            _executeDelegatecall(delegate, callData);
+        } else if (execType == EXECTYPE_TRY) {
             (bool success, bytes memory result) = _tryExecuteDelegatecall(delegate, callData);
             if (!success) emit TryDelegateCallUnsuccessful(callData, result);
-        } else revert UnsupportedExecType(execType);
+        } else {
+            revert UnsupportedExecType(execType);
+        }
     }
 
     /// @dev Executes a single transaction based on the specified execution type.
@@ -207,10 +209,7 @@ contract ExecutionHelper is IExecutionHelperEventsAndErrors {
     /// @param executionCalldata The calldata containing the transaction details (target address, value, and data).
     /// @param execType The execution type, which can be DEFAULT (revert on failure) or TRY (return on failure).
     /// @return returnData An array containing the result of the delegatecall execution.
-    function _handleDelegateCallExecutionAndReturnData(
-        bytes calldata executionCalldata,
-        ExecType execType
-    ) internal returns (bytes[] memory returnData) {
+    function _handleDelegateCallExecutionAndReturnData(bytes calldata executionCalldata, ExecType execType) internal returns (bytes[] memory returnData) {
         (address delegate, bytes calldata callData) = executionCalldata.decodeDelegateCall();
         returnData = new bytes[](1);
         bool success;
@@ -219,6 +218,8 @@ contract ExecutionHelper is IExecutionHelperEventsAndErrors {
         } else if (execType == EXECTYPE_TRY) {
             (success, returnData[0]) = _tryExecuteDelegatecall(delegate, callData);
             if (!success) emit TryDelegateCallUnsuccessful(callData, returnData[0]);
-        } else revert UnsupportedExecType(execType);
+        } else {
+            revert UnsupportedExecType(execType);
+        }
     }
 }

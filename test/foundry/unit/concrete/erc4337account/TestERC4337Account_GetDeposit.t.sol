@@ -2,11 +2,11 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_GetDeposit
 /// @notice Tests for the getDeposit function in the ERC4337 account.
-contract TestERC4337Account_GetDeposit is NexusTest_Base {
+contract TestERC4337Account_GetDeposit is PassportTest_Base {
     uint256 initialDeposit;
     uint256 defaultMaxPercentDelta;
 

@@ -37,13 +37,13 @@ import "../../../contracts/interfaces/base/IModuleManager.sol";
 import "../../../contracts/interfaces/modules/IModule.sol";
 import "../../../contracts/interfaces/modules/IExecutor.sol";
 import "../../../contracts/interfaces/base/IStorage.sol";
-import "../../../contracts/interfaces/INexus.sol";
+import "../../../contracts/interfaces/IPassport.sol";
 
 // ==========================
 // Contract Implementations
 // ==========================
-import "../../../contracts/Nexus.sol";
-import "../../../contracts/factory/NexusAccountFactory.sol";
+import "../../../contracts/Passport.sol";
+import "../../../contracts/factory/PassportAccountFactory.sol";
 import "../../../contracts/factory/RegistryFactory.sol";
 import "./../../../contracts/modules/validators/K1Validator.sol";
 import "../../../contracts/common/Stakeable.sol";
@@ -69,7 +69,7 @@ import "../../../contracts/mocks/Counter.sol";
 // Additional Contract Imports
 // ==========================
 import "./../../../contracts/factory/K1ValidatorFactory.sol";
-import "./../../../contracts/utils/NexusBootstrap.sol";
+import "./../../../contracts/utils/PassportBootstrap.sol";
 import "./../../../contracts/lib/BootstrapLib.sol";
 import "../../../contracts/mocks/MockNFT.sol";
 import "../../../contracts/mocks/MockToken.sol";

@@ -9,8 +9,7 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { SignatureCheckerLib } from "solady/utils/SignatureCheckerLib.sol";
 import { PackedUserOperation } from "account-abstraction/interfaces/PackedUserOperation.sol";
@@ -20,16 +19,13 @@ import { EnumerableSet } from "../../lib/EnumerableSet4337.sol";
 import { MODULE_TYPE_VALIDATOR, VALIDATION_SUCCESS, VALIDATION_FAILED } from "../../types/Constants.sol";
 import { MessageHashUtils } from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
-/// @title Nexus - K1Validator (ECDSA)
+/// @title Passport - K1Validator (ECDSA)
 /// @notice Validator module for smart accounts, verifying user operation signatures
 ///         based on the K1 curve (secp256k1), a widely used ECDSA algorithm.
 /// @dev Implements secure ownership validation by checking signatures against registered
 ///      owners. This module supports ERC-7579 and ERC-4337 standards, ensuring only the
 ///      legitimate owner of a smart account can authorize transactions.
 ///      Implements ERC-7739
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 contract K1Validator is IValidator, ERC7739Validator {
@@ -151,7 +147,13 @@ contract K1Validator is IValidator, ERC7739Validator {
         address sender,
         bytes32 hash,
         bytes calldata signature
-    ) external view virtual override returns (bytes4 sigValidationResult) {
+    )
+        external
+        view
+        virtual
+        override
+        returns (bytes4 sigValidationResult)
+    {
         // check if sig is valid
         bool success = _erc1271IsValidSignatureWithSender(sender, hash, _erc1271UnwrapSignature(signature));
         /// @solidity memory-safe-assembly
@@ -216,9 +218,11 @@ contract K1Validator is IValidator, ERC7739Validator {
     // msg.sender = Smart Account
     // sender = 1271 og request sender
     function _erc1271CallerIsSafe(address sender) internal view virtual override returns (bool) {
-        return (sender == 0x000000000000D9ECebf3C23529de49815Dac1c4c || // MulticallerWithSigner
-            sender == msg.sender || // Smart Account. Assume smart account never sends non safe eip-712 struct
-            _safeSenders.contains(msg.sender, sender)); // check if sender is in _safeSenders for the Smart Account
+        return (
+            sender == 0x000000000000D9ECebf3C23529de49815Dac1c4c // MulticallerWithSigner
+                || sender == msg.sender // Smart Account. Assume smart account never sends non safe eip-712 struct
+                || _safeSenders.contains(msg.sender, sender)
+        ); // check if sender is in _safeSenders for the Smart Account
     }
 
     /// @notice Internal method that does the job of validating the signature via ECDSA (secp256k1)

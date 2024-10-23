@@ -2,11 +2,11 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_EntryPoint
 /// @notice Tests the correct EntryPoint address for ERC4337 accounts.
-contract TestERC4337Account_EntryPoint is NexusTest_Base {
+contract TestERC4337Account_EntryPoint is PassportTest_Base {
     /// @notice Initializes the testing environment.
     function setUp() public {
         init();

@@ -1,18 +1,18 @@
-[![Biconomy](https://img.shields.io/badge/Made_with_%F0%9F%8D%8A_by-Biconomy-ff4e17?style=flat)](https://biconomy.io) [![License MIT](https://img.shields.io/badge/License-MIT-blue?&style=flat)](./LICENSE) [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFBD10.svg)](https://getfoundry.sh/)
+[![License MIT](https://img.shields.io/badge/License-MIT-blue?&style=flat)](./LICENSE) [![Foundry](https://img.shields.io/badge/Built%20with-Foundry-FFBD10.svg)](https://getfoundry.sh/)
 
 ![Codecov Foundry Coverage](https://img.shields.io/badge/100%25-brightgreen?style=flat&logo=codecov&label=Foundry%20Coverage)
 
-# Nexus - ERC-7579 Modular Smart Account Base 🚀
+# Passport - ERC-7579 Modular Smart Account Base 🚀
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/bcnmy/nexus)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/denniswon/passport)
 
 This repository serves as a comprehensive foundation for smart contract projects, streamlining the development process with a focus on best practices, security, and efficiency.
 
-Documentation: (<https://github.com/bcnmy/nexus/wiki>)
+Documentation: (<https://github.com/denniswon/passport/wiki>)
 
 ## 📚 Table of Contents
 
-- [Nexus - ERC-7579 Modular Smart Account Base 🚀](#nexus---erc-7579-modular-smart-account-base-)
+- [Passport - ERC-7579 Modular Smart Account Base 🚀](#passport---erc-7579-modular-smart-account-base-)
   - [📚 Table of Contents](#-table-of-contents)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
@@ -27,12 +27,11 @@ Documentation: (<https://github.com/bcnmy/nexus/wiki>)
     - [🎨 Lint Code](#-lint-code)
     - [🖌️ Auto-fix Linting Issues](#️-auto-fix-linting-issues)
   - [🔒 Security Audits](#-security-audits)
-  - [🏆 Biconomy Champions League 🏆](#-biconomy-champions-league-)
+  - [🏆 Magic Champions League 🏆](#-magic-champions-league-)
     - [Champions Roster](#champions-roster)
     - [Entering the League](#entering-the-league)
   - [Documentation and Resources](#documentation-and-resources)
   - [License](#license)
-  - [Connect with Biconomy 🍊](#connect-with-biconomy-)
 
 ## Getting Started
 
@@ -50,8 +49,8 @@ To kickstart, follow these steps:
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/bcnmy/nexus.git
-cd nexus
+git clone https://github.com/denniswon/passport.git
+cd passport
 ```
 
 2. **Install dependencies:**
@@ -139,9 +138,9 @@ Automatically fixes linting problems found.
 | CodeHawks-Cyfrin | 17-09-2024 | [View Report](./audits/CodeHawks-Cyfrin-17-09-2024.pdf) |
 | Firm Name        | DD-MM-YYYY | [View Report](./audits)                                 |
 
-## 🏆 Biconomy Champions League 🏆
+## 🏆 Magic Champions League 🏆
 
-Welcome to the Champions League, a place where your contributions to Biconomy are celebrated and immortalized in our Hall of Fame. This elite group showcases individuals who have significantly advanced our mission, from enhancing code efficiency to strengthening security, and enriching our documentation.
+Welcome to the Champions League, a place where your contributions to Passport are celebrated and immortalized in our Hall of Fame. This elite group showcases individuals who have significantly advanced our mission, from enhancing code efficiency to strengthening security, and enriching our documentation.
 
 ### Champions Roster
 
@@ -160,7 +159,7 @@ Your journey to becoming a champion can start in any domain:
 - **Security Guardians**: Enhance our safety following the [Security Guidelines](./SECURITY.md).
 - **Documentation Scribes**: Elevate our knowledge base with your contributions.
 
-The **Champions League** is not just a recognition, it's a testament to the impactful work done by our community. Whether you're optimizing gas usage or securing our contracts, your contributions help shape the future of Biconomy.
+The **Champions League** is not just a recognition, it's a testament to the impactful work done by our community. Whether you're optimizing gas usage or securing our contracts, your contributions help shape the future of Passport.
 
 > **To Join**: Leave a lasting impact in your chosen area. Our Hall of Fame is regularly updated to honor our most dedicated contributors.
 
@@ -179,7 +178,3 @@ For a comprehensive understanding of our project and to contribute effectively, 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
-## Connect with Biconomy 🍊
-
-[![Website](https://img.shields.io/badge/🍊-Website-ff4e17?style=for-the-badge&logoColor=white)](https://biconomy.io) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/biconomy) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/biconomy) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/biconomy) [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/biconomy) [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UC0CtA-Dw9yg-ENgav_VYjRw) [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/bcnmy/)

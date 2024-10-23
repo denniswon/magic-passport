@@ -5,7 +5,7 @@ import "../../../utils/Imports.sol";
 
 /// @title Test suite for checking account ID in AccountConfig
 contract TestAccountConfig_AccountId is Test {
-    Nexus internal accountConfig;
+    Passport internal accountConfig;
     address _ENTRYPOINT = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
 
     modifier givenTheAccountConfiguration() {
@@ -14,12 +14,12 @@ contract TestAccountConfig_AccountId is Test {
 
     /// @notice Initialize the testing environment
     function setUp() public {
-        accountConfig = new Nexus(_ENTRYPOINT);
+        accountConfig = new Passport(_ENTRYPOINT);
     }
 
     /// @notice Tests if the account ID returns the expected value
     function test_WhenCheckingTheAccountID() external givenTheAccountConfiguration {
-        string memory expected = "biconomy.nexus.1.0.0-beta.1";
+        string memory expected = "magic.passport.1.0.0-beta.1";
         assertEq(accountConfig.accountId(), expected, "AccountConfig should return the expected account ID.");
     }
 }

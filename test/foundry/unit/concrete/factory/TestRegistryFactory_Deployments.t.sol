@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestRegistryFactory_Deployments
 /// @notice Tests for deploying accounts using the RegistryFactory and various methods.
-contract TestRegistryFactory_Deployments is NexusTest_Base {
+contract TestRegistryFactory_Deployments is PassportTest_Base {
     Vm.Wallet public user;
     bytes initData;
     RegistryFactory public registryFactory;
@@ -49,7 +49,7 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         new RegistryFactory(address(0), address(this), registry, attestersArray, 1);
     }
 
-        /// @notice Tests that the constructor reverts if the threshold is greater than the length of the attesters array.
+    /// @notice Tests that the constructor reverts if the threshold is greater than the length of the attesters array.
     function test_Constructor_RevertIf_ThresholdExceedsAttestersLength() public {
         address implementation = address(0x123);
         address[] memory attestersArray = new address[](1);
@@ -65,12 +65,12 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         address attester = address(0x456);
         address attester2 = address(0x654);
         vm.startPrank(FACTORY_OWNER.addr);
-        
+
         registryFactory.addAttester(attester);
         registryFactory.addAttester(attester2);
         assertTrue(registryFactory.attesters(0) == attester, "Attester should be added");
         assertTrue(registryFactory.attesters(1) == attester2, "Attester should be added");
-        
+
         registryFactory.removeAttester(attester);
         assertFalse(registryFactory.attesters(0) == attester, "Attester should be removed");
         vm.stopPrank();
@@ -87,7 +87,7 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = registryFactory.computeAccountAddress(_initData, salt);
 
@@ -97,18 +97,12 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         assertEq(deployedAccountAddress, expectedAddress, "Deployed account address mismatch");
 
         assertEq(
-            Nexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""),
-            true,
-            "Validator should be installed"
+            Passport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""), true, "Validator should be installed"
         );
+        assertEq(Passport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_EXECUTOR, address(EXECUTOR_MODULE), ""), true, "Executor should be installed");
+        assertEq(Passport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_HOOK, address(HOOK_MODULE), ""), true, "Hook should be installed");
         assertEq(
-            Nexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_EXECUTOR, address(EXECUTOR_MODULE), ""),
-            true,
-            "Executor should be installed"
-        );
-        assertEq(Nexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_HOOK, address(HOOK_MODULE), ""), true, "Hook should be installed");
-        assertEq(
-            Nexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_FALLBACK, address(HANDLER_MODULE), abi.encode(GENERIC_FALLBACK_SELECTOR)),
+            Passport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_FALLBACK, address(HANDLER_MODULE), abi.encode(GENERIC_FALLBACK_SELECTOR)),
             true,
             "Fallback should be installed for selector"
         );
@@ -127,10 +121,10 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, registry, attesters, threshold);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, registry, attesters, threshold);
 
         // Expect the account creation to revert
-        vm.expectRevert(abi.encodeWithSelector(NexusInitializationFailed.selector));
+        vm.expectRevert(abi.encodeWithSelector(PassportInitializationFailed.selector));
         registryFactory.createAccount{ value: 1 ether }(_initData, salt);
     }
 
@@ -145,7 +139,7 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt0 = keccak256(saDeploymentIndex0);
         bytes32 salt1 = keccak256(saDeploymentIndex1);
 
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, registry, attesters, threshold);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, registry, attesters, threshold);
 
         address payable accountAddress0 = registryFactory.createAccount{ value: 1 ether }(_initData, salt0);
         address payable accountAddress1 = registryFactory.createAccount{ value: 1 ether }(_initData, salt1);
@@ -167,10 +161,10 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, REGISTRY, ATTESTERS, THRESHOLD);
 
         // Expect the account creation to revert with ModuleNotWhitelisted error
-        vm.expectRevert(abi.encodeWithSelector(NexusInitializationFailed.selector));
+        vm.expectRevert(abi.encodeWithSelector(PassportInitializationFailed.selector));
         registryFactory.createAccount{ value: 1 ether }(_initData, salt);
     }
 
@@ -189,7 +183,7 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, REGISTRY, attesters, 0);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, REGISTRY, attesters, 0);
 
         // Expect the account creation to revert due to zero threshold
         registryFactory.createAccount{ value: 1 ether }(_initData, salt);
@@ -209,7 +203,7 @@ contract TestRegistryFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusCalldata(validators, executors, hook, fallbacks, REGISTRY, noAttesters, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportCalldata(validators, executors, hook, fallbacks, REGISTRY, noAttesters, THRESHOLD);
 
         // Expect the account creation to revert due to no attesters
         registryFactory.createAccount{ value: 1 ether }(_initData, salt);

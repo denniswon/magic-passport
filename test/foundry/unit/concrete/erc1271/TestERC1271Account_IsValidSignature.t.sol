@@ -2,12 +2,12 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC1271Account_IsValidSignature
 /// @notice This contract tests the ERC1271 signature validation functionality.
 /// @dev Uses MockValidator for testing signature validation.
-contract TestERC1271Account_IsValidSignature is NexusTest_Base {
+contract TestERC1271Account_IsValidSignature is PassportTest_Base {
     struct TestTemps {
         bytes32 userOpHash;
         bytes32 contents;
@@ -57,10 +57,7 @@ contract TestERC1271Account_IsValidSignature is NexusTest_Base {
         unchecked {
             uint256 vs = uint256(t.s) | (uint256(t.v - 27) << 255);
             signature = abi.encodePacked(t.r, vs, APP_DOMAIN_SEPARATOR, t.contents, contentsType, uint16(contentsType.length));
-            assertEq(
-                ALICE_ACCOUNT.isValidSignature(toContentsHash(t.contents), abi.encodePacked(address(VALIDATOR_MODULE), signature)),
-                bytes4(0x1626ba7e)
-            );
+            assertEq(ALICE_ACCOUNT.isValidSignature(toContentsHash(t.contents), abi.encodePacked(address(VALIDATOR_MODULE), signature)), bytes4(0x1626ba7e));
         }
     }
 
@@ -112,10 +109,7 @@ contract TestERC1271Account_IsValidSignature is NexusTest_Base {
 
     /// @notice Tests the supportsNestedTypedDataSign function.
     function test_SupportsNestedTypedDataSign() public {
-        assertEq(
-            ALICE_ACCOUNT.supportsNestedTypedDataSign(),
-            bytes4(keccak256("supportsNestedTypedDataSign()"))
-        );
+        assertEq(ALICE_ACCOUNT.supportsNestedTypedDataSign(), bytes4(keccak256("supportsNestedTypedDataSign()")));
     }
 
     /// @notice Generates an ERC-1271 hash for the given contents and account.
@@ -180,16 +174,15 @@ contract TestERC1271Account_IsValidSignature is NexusTest_Base {
         AccountDomainStruct memory t;
         (t.fields, t.name, t.version, t.chainId, t.verifyingContract, t.salt, t.extensions) = EIP712(account).eip712Domain();
 
-        return
-            abi.encode(
-                t.fields,
-                keccak256(bytes(t.name)),
-                keccak256(bytes(t.version)),
-                t.chainId,
-                t.verifyingContract, // Use the account address as the verifying contract.
-                t.salt,
-                keccak256(abi.encodePacked(t.extensions))
-            );
+        return abi.encode(
+            t.fields,
+            keccak256(bytes(t.name)),
+            keccak256(bytes(t.version)),
+            t.chainId,
+            t.verifyingContract, // Use the account address as the verifying contract.
+            t.salt,
+            keccak256(abi.encodePacked(t.extensions))
+        );
     }
 
     /// @notice Generates a random string from given byte choices.
@@ -206,11 +199,7 @@ contract TestERC1271Account_IsValidSignature is NexusTest_Base {
                 mstore(0x40, and(add(add(result, 0x40), resultLength), not(31)))
                 mstore(result, resultLength)
 
-                for {
-                    let i := 0
-                } lt(i, resultLength) {
-                    i := add(i, 1)
-                } {
+                for { let i := 0 } lt(i, resultLength) { i := add(i, 1) } {
                     mstore(0x20, gas())
                     mstore8(add(add(result, 0x20), i), mload(add(add(byteChoices, 1), mod(keccak256(0x00, 0x40), mload(byteChoices)))))
                 }
@@ -222,10 +211,9 @@ contract TestERC1271Account_IsValidSignature is NexusTest_Base {
     /// @param signature The original signature.
     /// @return The ERC-6492 wrapped signature.
     function erc6492Wrap(bytes memory signature) internal returns (bytes memory) {
-        return
-            abi.encodePacked(
-                abi.encode(randomNonZeroAddress(), bytes(randomString("12345", false)), signature),
-                bytes32(0x6492649264926492649264926492649264926492649264926492649264926492)
-            );
+        return abi.encodePacked(
+            abi.encode(randomNonZeroAddress(), bytes(randomString("12345", false)), signature),
+            bytes32(0x6492649264926492649264926492649264926492649264926492649264926492)
+        );
     }
 }

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import { IEntryPoint, IStakeManager } from "account-abstraction/interfaces/IEntryPoint.sol";
 
 /// @title TestStakeable
 /// @notice Unit tests for the Stakeable contract
-contract TestStakeable is NexusTest_Base {
+contract TestStakeable is PassportTest_Base {
     Stakeable public stakeable;
     address public owner;
     IEntryPoint public entryPoint;
@@ -16,7 +16,7 @@ contract TestStakeable is NexusTest_Base {
         init();
         owner = FACTORY_OWNER.addr;
         stakeable = new Stakeable(owner);
-        entryPoint = IEntryPoint(address(ENTRYPOINT)); // Use the ENTRYPOINT from NexusTest_Base
+        entryPoint = IEntryPoint(address(ENTRYPOINT)); // Use the ENTRYPOINT from PassportTest_Base
     }
 
     /// @notice Tests the addStake function

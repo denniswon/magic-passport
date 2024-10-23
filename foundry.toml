@@ -27,10 +27,10 @@
   via-ir = false
 
 [etherscan]
-  arbitrum = { key = "${API_KEY_ARBISCAN}" }
-  mainnet = { key = "${API_KEY_ETHERSCAN}" }
-  optimism = { key = "${API_KEY_OPTIMISTIC_ETHERSCAN}" }
-  polygon = { key = "${API_KEY_POLYGONSCAN}" }
+  arb-sepolia = { key = "${API_KEY_ARBISCAN}" }
+  base-sepolia = { key = "${API_KEY_ETHERSCAN}" }
+  opt-sepolia = { key = "${API_KEY_OPTIMISTIC_ETHERSCAN}" }
+  polygonzkevm-cardona = { key = "${API_KEY_POLYGONSCAN}" }
   sepolia = { key = "${API_KEY_ETHERSCAN}" }
 
 [fmt]
@@ -44,9 +44,9 @@
   wrap_comments = true
 
 [rpc_endpoints]
-  arbitrum = "https://arbitrum-mainnet.infura.io/v3/${API_KEY_INFURA}"
   localhost = "http://localhost:8545"
-  mainnet = "https://eth-mainnet.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
-  optimism = "https://optimism-mainnet.infura.io/v3/${API_KEY_INFURA}"
-  polygon = "https://polygon-mainnet.infura.io/v3/${API_KEY_INFURA}"
-  sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
+  arb-sepolia = "https://arb-sepolia.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
+  base-sepolia = "https://base-sepolia.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
+  opt-sepolia = "https://opt-sepolia.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
+  polygonzkevm-cardona = "https://polygonzkevm-cardona.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
+  sepolia = "https://sepolia.infura.io/v3/${API_KEY_ALCHEMY}"

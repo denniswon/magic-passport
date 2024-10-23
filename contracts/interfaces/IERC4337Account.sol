@@ -9,19 +9,15 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { PackedUserOperation } from "account-abstraction/interfaces/PackedUserOperation.sol";
 
-/// @title Nexus - IERC4337Account
+/// @title Passport - IERC4337Account
 /// @notice This interface defines the necessary validation and execution methods for smart accounts under the ERC-4337 standard.
 /// @dev Provides a structure for implementing custom validation logic and execution methods that comply with ERC-4337 "account abstraction" specs.
 /// The validation method ensures proper signature and nonce verification before proceeding with transaction execution, critical for securing userOps.
 /// Also allows for the optional definition of an execution method to handle transactions post-validation, enhancing flexibility.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 interface IERC4337Account {
@@ -51,11 +47,7 @@ interface IERC4337Account {
     ///                                                    If an account doesn't use time-range, it is enough to
     ///                                                    return SIG_VALIDATION_FAILED value (1) for signature failure.
     ///                              Note that the validation code cannot use block.timestamp (or block.number) directly.
-    function validateUserOp(
-        PackedUserOperation calldata userOp,
-        bytes32 userOpHash,
-        uint256 missingAccountFunds
-    ) external returns (uint256 validationData);
+    function validateUserOp(PackedUserOperation calldata userOp, bytes32 userOpHash, uint256 missingAccountFunds) external returns (uint256 validationData);
 
     /// Account may implement this execute method.
     /// passing this methodSig at the beginning of callData will cause the entryPoint to pass the

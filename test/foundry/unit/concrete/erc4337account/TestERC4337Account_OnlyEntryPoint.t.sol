@@ -3,12 +3,12 @@ pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
 import { MODE_VALIDATION } from "contracts/types/Constants.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_OnlyEntryPoint
-/// @notice Tests the onlyEntryPoint modifier in Nexus contracts under ERC4337 standards.
-contract TestERC4337Account_OnlyEntryPoint is NexusTest_Base {
-    Nexus public account;
+/// @notice Tests the onlyEntryPoint modifier in Passport contracts under ERC4337 standards.
+contract TestERC4337Account_OnlyEntryPoint is PassportTest_Base {
+    Passport public account;
     MockValidator public validator;
     address public userAddress;
 

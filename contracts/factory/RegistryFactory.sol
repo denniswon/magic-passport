@@ -9,28 +9,24 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { LibClone } from "solady/utils/LibClone.sol";
 import { LibSort } from "solady/utils/LibSort.sol";
 import { BytesLib } from "../lib/BytesLib.sol";
-import { INexus } from "../interfaces/INexus.sol";
-import { BootstrapConfig } from "../utils/NexusBootstrap.sol";
+import { IPassport } from "../interfaces/IPassport.sol";
+import { BootstrapConfig } from "../utils/PassportBootstrap.sol";
 import { Stakeable } from "../common/Stakeable.sol";
 import { IERC7484 } from "../interfaces/IERC7484.sol";
-import { INexusFactory } from "../interfaces/factory/INexusFactory.sol";
+import { IPassportFactory } from "../interfaces/factory/IPassportFactory.sol";
 import { MODULE_TYPE_VALIDATOR, MODULE_TYPE_EXECUTOR, MODULE_TYPE_FALLBACK, MODULE_TYPE_HOOK } from "../types/Constants.sol";
 
 /// @title RegistryFactory
-/// @notice Factory for creating Nexus accounts with whitelisted modules. Ensures compliance with ERC-7579 and ERC-4337 standards.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
+/// @notice Factory for creating Passport accounts with whitelisted modules. Ensures compliance with ERC-7579 and ERC-4337 standards.
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
-contract RegistryFactory is Stakeable, INexusFactory {
-    /// @notice Address of the implementation contract used to create new Nexus instances.
+contract RegistryFactory is Stakeable, IPassportFactory {
+    /// @notice Address of the implementation contract used to create new Passport instances.
     /// @dev This address is immutable and set upon deployment, ensuring the implementation cannot be changed.
     address public immutable ACCOUNT_IMPLEMENTATION;
 
@@ -48,7 +44,7 @@ contract RegistryFactory is Stakeable, INexusFactory {
     error InvalidThreshold(uint8 threshold, uint256 attestersLength);
 
     /// @notice Constructor to set the smart account implementation address and owner.
-    /// @param implementation_ The address of the Nexus implementation to be used for all deployments.
+    /// @param implementation_ The address of the Passport implementation to be used for all deployments.
     /// @param owner_ The address of the owner of the factory.
     constructor(address implementation_, address owner_, IERC7484 registry_, address[] memory attesters_, uint8 threshold_) Stakeable(owner_) {
         require(implementation_ != address(0), ImplementationAddressCanNotBeZero());
@@ -102,26 +98,19 @@ contract RegistryFactory is Stakeable, INexusFactory {
         threshold = newThreshold;
     }
 
-    /// @notice Creates a new Nexus account with the provided initialization data.
-    /// @param initData Initialization data that is expected to be compatible with a `NexusBootstrap` contract's initialization method.
-    /// @param salt Unique salt used for deterministic deployment of the Nexus smart account.
-    /// @return The address of the newly created Nexus account.
+    /// @notice Creates a new Passport account with the provided initialization data.
+    /// @param initData Initialization data that is expected to be compatible with a `PassportBootstrap` contract's initialization method.
+    /// @param salt Unique salt used for deterministic deployment of the Passport smart account.
+    /// @return The address of the newly created Passport account.
     function createAccount(bytes calldata initData, bytes32 salt) external payable override returns (address payable) {
         // Decode the initialization data to extract the target bootstrap contract and the data to be used for initialization.
         (, bytes memory callData) = abi.decode(initData, (address, bytes));
 
-        // Ensure that the initData is structured for the expected NexusBootstrap.initNexus or similar method.
-        // This step is crucial for ensuring the proper initialization of the Nexus smart account.
+        // Ensure that the initData is structured for the expected PassportBootstrap.initPassport or similar method.
+        // This step is crucial for ensuring the proper initialization of the Passport smart account.
         bytes memory innerData = BytesLib.slice(callData, 4, callData.length - 4);
-        (
-            BootstrapConfig[] memory validators,
-            BootstrapConfig[] memory executors,
-            BootstrapConfig memory hook,
-            BootstrapConfig[] memory fallbacks,
-            ,
-            ,
-
-        ) = abi.decode(innerData, (BootstrapConfig[], BootstrapConfig[], BootstrapConfig, BootstrapConfig[], address, address[], uint8));
+        (BootstrapConfig[] memory validators, BootstrapConfig[] memory executors, BootstrapConfig memory hook, BootstrapConfig[] memory fallbacks,,,) =
+            abi.decode(innerData, (BootstrapConfig[], BootstrapConfig[], BootstrapConfig, BootstrapConfig[], address, address[], uint8));
 
         // Ensure that all specified modules are whitelisted and allowed for the account.
         for (uint256 i = 0; i < validators.length; i++) {
@@ -145,18 +134,18 @@ contract RegistryFactory is Stakeable, INexusFactory {
         (bool alreadyDeployed, address account) = LibClone.createDeterministicERC1967(msg.value, ACCOUNT_IMPLEMENTATION, actualSalt);
 
         if (!alreadyDeployed) {
-            // Initialize the Nexus account using the provided initialization data
-            INexus(account).initializeAccount(initData);
+            // Initialize the Passport account using the provided initialization data
+            IPassport(account).initializeAccount(initData);
             emit AccountCreated(account, initData, salt);
         }
 
         return payable(account);
     }
 
-    /// @notice Computes the expected address of a Nexus contract using the factory's deterministic deployment algorithm.
+    /// @notice Computes the expected address of a Passport contract using the factory's deterministic deployment algorithm.
     /// @param initData - Initialization data to be called on the new Smart Account.
     /// @param salt - Unique salt for the Smart Account creation.
-    /// @return expectedAddress The expected address at which the Nexus contract will be deployed if the provided parameters are used.
+    /// @return expectedAddress The expected address at which the Passport contract will be deployed if the provided parameters are used.
     function computeAccountAddress(bytes calldata initData, bytes32 salt) external view override returns (address payable expectedAddress) {
         // Compute the actual salt for deterministic deployment
         bytes32 actualSalt = keccak256(abi.encodePacked(initData, salt));

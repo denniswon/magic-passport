@@ -2,7 +2,7 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import "../../../shared/TestModuleManagement_Base.t.sol";
 
 /// @title TestModuleManager_HookModule
@@ -83,12 +83,7 @@ contract TestModuleManager_HookModule is TestModuleManagement_Base {
         test_InstallHookModule_Success();
 
         // Install the executor module to trigger the hooks
-        bytes memory installCallData = abi.encodeWithSelector(
-            IModuleManager.installModule.selector,
-            MODULE_TYPE_EXECUTOR,
-            address(EXECUTOR_MODULE),
-            ""
-        );
+        bytes memory installCallData = abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_EXECUTOR, address(EXECUTOR_MODULE), "");
 
         // Prepare and execute the installation operation
         Execution[] memory executions = new Execution[](1);

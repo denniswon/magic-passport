@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../utils/NexusTest_Base.t.sol";
+import "../../utils/PassportTest_Base.t.sol";
 
-/// @title TestFuzz_ValidateUserOp - Fuzz testing for the validateUserOp function of the Nexus smart account
-/// @notice This contract inherits from NexusTest_Base to provide common setup and utilities for fuzz testing
-contract TestFuzz_ValidateUserOp is NexusTest_Base {
+/// @title TestFuzz_ValidateUserOp - Fuzz testing for the validateUserOp function of the Passport smart account
+/// @notice This contract inherits from PassportTest_Base to provide common setup and utilities for fuzz testing
+contract TestFuzz_ValidateUserOp is PassportTest_Base {
     /// @notice Initializes the testing environment and sets the user address
     function setUp() public {
         init(); // Initializes all required contracts and wallets

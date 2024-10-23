@@ -9,8 +9,7 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { SentinelListLib } from "sentinellist/SentinelList.sol";
 import { Storage } from "./Storage.sol";
@@ -23,17 +22,22 @@ import { CallType, CALLTYPE_SINGLE, CALLTYPE_STATIC } from "../lib/ModeLib.sol";
 import { ExecLib } from "../lib/ExecLib.sol";
 import { LocalCallDataParserLib } from "../lib/local/LocalCallDataParserLib.sol";
 import { IModuleManagerEventsAndErrors } from "../interfaces/base/IModuleManagerEventsAndErrors.sol";
-import { MODULE_TYPE_VALIDATOR, MODULE_TYPE_EXECUTOR, MODULE_TYPE_FALLBACK, MODULE_TYPE_HOOK, MODULE_TYPE_MULTI, MODULE_ENABLE_MODE_TYPE_HASH, ERC1271_MAGICVALUE } from "../types/Constants.sol";
+import {
+    MODULE_TYPE_VALIDATOR,
+    MODULE_TYPE_EXECUTOR,
+    MODULE_TYPE_FALLBACK,
+    MODULE_TYPE_HOOK,
+    MODULE_TYPE_MULTI,
+    MODULE_ENABLE_MODE_TYPE_HASH,
+    ERC1271_MAGICVALUE
+} from "../types/Constants.sol";
 import { EIP712 } from "solady/utils/EIP712.sol";
 import { ExcessivelySafeCall } from "excessively-safe-call/ExcessivelySafeCall.sol";
 import { RegistryAdapter } from "./RegistryAdapter.sol";
 
-/// @title Nexus - ModuleManager
-/// @notice Manages Validator, Executor, Hook, and Fallback modules within the Nexus suite, supporting
+/// @title Passport - ModuleManager
+/// @notice Manages Validator, Executor, Hook, and Fallback modules within the Passport suite, supporting
 /// @dev Implements SentinelList for managing modules via a linked list structure, adhering to ERC-7579.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 abstract contract ModuleManager is Storage, EIP712, IModuleManagerEventsAndErrors, RegistryAdapter {
@@ -61,7 +65,7 @@ abstract contract ModuleManager is Storage, EIP712, IModuleManagerEventsAndError
         }
     }
 
-    receive() external payable {}
+    receive() external payable { }
 
     /// @dev Fallback function to manage incoming calls using designated handlers based on the call type.
     fallback(bytes calldata callData) external payable withHook returns (bytes memory) {
@@ -124,8 +128,9 @@ abstract contract ModuleManager is Storage, EIP712, IModuleManagerEventsAndError
 
         (module, moduleType, moduleInitData, enableModeSignature, userOpSignature) = packedData.parseEnableModeData();
 
-        if (!_checkEnableModeSignature(_getEnableModeDataHash(module, moduleType, userOpHash, moduleInitData), enableModeSignature))
+        if (!_checkEnableModeSignature(_getEnableModeDataHash(module, moduleType, userOpHash, moduleInitData), enableModeSignature)) {
             revert EnableModeSigError();
+        }
 
         _installModule(moduleType, module, moduleInitData);
     }
@@ -400,8 +405,7 @@ abstract contract ModuleManager is Storage, EIP712, IModuleManagerEventsAndError
     /// @return True if there is at least one validator, otherwise false.
     function _hasValidators() internal view returns (bool) {
         return
-            _getAccountStorage().validators.getNext(address(0x01)) != address(0x01) &&
-            _getAccountStorage().validators.getNext(address(0x01)) != address(0x00);
+            _getAccountStorage().validators.getNext(address(0x01)) != address(0x01) && _getAccountStorage().validators.getNext(address(0x01)) != address(0x00);
     }
 
     /// @dev Checks if an executor is currently installed.
@@ -478,7 +482,11 @@ abstract contract ModuleManager is Storage, EIP712, IModuleManagerEventsAndError
         SentinelListLib.SentinelList storage list,
         address cursor,
         uint256 size
-    ) private view returns (address[] memory array, address nextCursor) {
+    )
+        private
+        view
+        returns (address[] memory array, address nextCursor)
+    {
         (array, nextCursor) = list.getEntriesPaginated(cursor, size);
     }
 }

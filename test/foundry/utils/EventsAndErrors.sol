@@ -44,9 +44,8 @@ contract EventsAndErrors {
     error InvalidEntryPointAddress();
     error InnerCallFailed();
     error CallToDeployWithFactoryFailed();
-    error NexusInitializationFailed();
+    error PassportInitializationFailed();
     error InvalidThreshold(uint8 providedThreshold, uint256 attestersCount);
-
 
     // ==========================
     // Operation Errors

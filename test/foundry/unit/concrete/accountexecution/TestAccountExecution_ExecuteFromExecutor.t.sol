@@ -2,7 +2,7 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import "../../../shared/TestAccountExecution_Base.t.sol";
 
 contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
@@ -22,27 +22,14 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callDataInstall);
 
-        PackedUserOperation[] memory userOpsInstall = buildPackedUserOperation(
-            BOB,
-            BOB_ACCOUNT,
-            EXECTYPE_DEFAULT,
-            execution,
-            address(VALIDATOR_MODULE),
-            0
-        );
+        PackedUserOperation[] memory userOpsInstall = buildPackedUserOperation(BOB, BOB_ACCOUNT, EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
         ENTRYPOINT.handleOps(userOpsInstall, payable(address(BOB.addr)));
     }
 
     /// @notice Tests single execution via MockExecutor
     function test_ExecuteSingleFromExecutor_Success() public {
         bytes memory incrementCallData = abi.encodeWithSelector(Counter.incrementNumber.selector);
-        bytes memory execCallData = abi.encodeWithSelector(
-            MockExecutor.executeViaAccount.selector,
-            BOB_ACCOUNT,
-            address(counter),
-            0,
-            incrementCallData
-        );
+        bytes memory execCallData = abi.encodeWithSelector(MockExecutor.executeViaAccount.selector, BOB_ACCOUNT, address(counter), 0, incrementCallData);
 
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(mockExecutor), 0, execCallData);
@@ -51,18 +38,16 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         ENTRYPOINT.handleOps(userOpsExec, payable(address(BOB.addr)));
         assertEq(counter.getNumber(), 1, "Counter should have incremented");
     }
-     
-    /// @notice Tests delegate call execution via MockExecutor 
+
+    /// @notice Tests delegate call execution via MockExecutor
     // Review
     function test_ExecuteDelegateCallFromExecutor_Success() public {
-
-        (bool res, ) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether}(""); // Fund BOB_ACCOUNT
+        (bool res,) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }(""); // Fund BOB_ACCOUNT
         assertEq(res, true, "Funding BOB_ACCOUNT should succeed");
 
         address valueTarget = makeAddr("valueTarget");
         uint256 value = 1 ether;
-        bytes memory sendValueCallData =
-            abi.encodeWithSelector(MockDelegateTarget.sendValue.selector, valueTarget, value);
+        bytes memory sendValueCallData = abi.encodeWithSelector(MockDelegateTarget.sendValue.selector, valueTarget, value);
         mockExecutor.execDelegatecall(BOB_ACCOUNT, sendValueCallData);
         // Assert that the value was set ie that execution was successful
         // assertTrue(valueTarget.balance == value);
@@ -92,7 +77,7 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
     function test_ExecuteSingleValueTransfer_Success() public {
         address receiver = address(0x123);
         uint256 sendValue = 1 ether;
-        (bool res, ) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }(""); // Fund BOB_ACCOUNT
+        (bool res,) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }(""); // Fund BOB_ACCOUNT
         assertEq(res, true, "Funding should succeed");
         mockExecutor.executeViaAccount(BOB_ACCOUNT, receiver, sendValue, "");
         assertEq(receiver.balance, sendValue, "Receiver should have received ETH");
@@ -176,21 +161,15 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         bytes memory executionCalldata = abi.encodePacked(address(counter), uint256(0), abi.encodeWithSelector(Counter.incrementNumber.selector));
 
         // Decode the mode to extract the execution type for the expected revert
-        (, ExecType execType, , ) = ModeLib.decode(unsupportedMode);
+        (, ExecType execType,,) = ModeLib.decode(unsupportedMode);
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(mockExecutor), 0, executionCalldata);
 
         // Expect the revert with UnsupportedExecType error
         vm.expectRevert(abi.encodeWithSelector(UnsupportedExecType.selector, execType));
 
-        // Call the custom execution via the mock executor, which should trigger the revert in Nexus
-        mockExecutor.customExecuteViaAccount(
-            unsupportedMode,
-            BOB_ACCOUNT,
-            address(counter),
-            0,
-            abi.encodeWithSelector(Counter.incrementNumber.selector)
-        );
+        // Call the custom execution via the mock executor, which should trigger the revert in Passport
+        mockExecutor.customExecuteViaAccount(unsupportedMode, BOB_ACCOUNT, address(counter), 0, abi.encodeWithSelector(Counter.incrementNumber.selector));
     }
 
     /// @notice Tests execution with an unsupported call type via MockExecutor
@@ -198,19 +177,13 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         ExecutionMode unsupportedMode = ExecutionMode.wrap(bytes32(abi.encodePacked(bytes1(0xee), bytes1(0x00), bytes4(0), bytes22(0))));
         bytes memory executionCalldata = abi.encodePacked(address(counter), uint256(0), abi.encodeWithSelector(Counter.incrementNumber.selector));
 
-        (CallType callType, , , ) = ModeLib.decode(unsupportedMode);
+        (CallType callType,,,) = ModeLib.decode(unsupportedMode);
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(mockExecutor), 0, executionCalldata);
 
         vm.expectRevert(abi.encodeWithSelector(UnsupportedCallType.selector, callType));
 
-        mockExecutor.customExecuteViaAccount(
-            unsupportedMode,
-            BOB_ACCOUNT,
-            address(counter),
-            0,
-            abi.encodeWithSelector(Counter.incrementNumber.selector)
-        );
+        mockExecutor.customExecuteViaAccount(unsupportedMode, BOB_ACCOUNT, address(counter), 0, abi.encodeWithSelector(Counter.incrementNumber.selector));
     }
 
     /// @notice Tests batch execution with an unsupported execution type via MockExecutor
@@ -220,21 +193,15 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         bytes memory executionCalldata = abi.encodePacked(address(counter), uint256(0), abi.encodeWithSelector(Counter.incrementNumber.selector));
 
         // Decode the mode to extract the execution type for the expected revert
-        (, ExecType execType, , ) = ModeLib.decode(unsupportedMode);
+        (, ExecType execType,,) = ModeLib.decode(unsupportedMode);
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(mockExecutor), 0, executionCalldata);
 
         // Expect the revert with UnsupportedExecType error
         vm.expectRevert(abi.encodeWithSelector(UnsupportedExecType.selector, execType));
 
-        // Call the custom execution via the mock executor, which should trigger the revert in Nexus
-        mockExecutor.customExecuteViaAccount(
-            unsupportedMode,
-            BOB_ACCOUNT,
-            address(counter),
-            0,
-            abi.encodeWithSelector(Counter.incrementNumber.selector)
-        );
+        // Call the custom execution via the mock executor, which should trigger the revert in Passport
+        mockExecutor.customExecuteViaAccount(unsupportedMode, BOB_ACCOUNT, address(counter), 0, abi.encodeWithSelector(Counter.incrementNumber.selector));
     }
 
     /// @notice Tests single execution with try mode via MockExecutor
@@ -273,7 +240,7 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         uint256 sendValue = 1 ether;
 
         // Fund BOB_ACCOUNT with 2 ETH to cover the value transfer
-        (bool res, ) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }("");
+        (bool res,) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }("");
         assertEq(res, true, "Funding BOB_ACCOUNT should succeed");
 
         // Perform the try execution via MockExecutor
@@ -331,7 +298,7 @@ contract TestAccountExecution_ExecuteFromExecutor is TestAccountExecution_Base {
         uint256 sendValue = 1 ether;
 
         // Fund BOB_ACCOUNT with 2 ETH to cover the value transfer
-        (bool res, ) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }("");
+        (bool res,) = payable(address(BOB_ACCOUNT)).call{ value: 2 ether }("");
         assertEq(res, true, "Funding BOB_ACCOUNT should succeed");
 
         Execution[] memory executions = new Execution[](1);

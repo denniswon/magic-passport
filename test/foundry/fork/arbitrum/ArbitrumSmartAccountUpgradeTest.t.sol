@@ -3,16 +3,16 @@ pragma solidity ^0.8.27;
 
 import "../../utils/Imports.sol";
 import { ArbitrumSettings } from "./ArbitrumSettings.t.sol";
-import { NexusTest_Base } from "../../utils/NexusTest_Base.t.sol";
+import { PassportTest_Base } from "../../utils/PassportTest_Base.t.sol";
 import { UserOperation } from "../../shared/interfaces/UserOperation.t.sol";
 import { IEntryPointV_0_6 } from "../../shared/interfaces/IEntryPointV_0_6.t.sol";
 import { IBiconomySmartAccountV2 } from "../../shared/interfaces/IBiconomySmartAccountV2.t.sol";
 
 /// @title ArbitrumSmartAccountUpgradeTest
-/// @notice Tests the upgrade process from Biconomy Smart Account V2 to Nexus and validates the upgrade process.
-contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
+/// @notice Tests the upgrade process from Biconomy Smart Account V2 to Passport and validates the upgrade process.
+contract ArbitrumSmartAccountUpgradeTest is PassportTest_Base, ArbitrumSettings {
     Vm.Wallet internal signer;
-    Nexus public newImplementation;
+    Passport public newImplementation;
     uint256 internal signerPrivateKey;
     IEntryPoint public ENTRYPOINT_V_0_7;
     IEntryPointV_0_6 public ENTRYPOINT_V_0_6;
@@ -28,13 +28,13 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
         smartAccountV2 = IBiconomySmartAccountV2(SMART_ACCOUNT_V2_ADDRESS);
         ENTRYPOINT_V_0_6 = IEntryPointV_0_6(ENTRYPOINT_ADDRESS);
         ENTRYPOINT_V_0_7 = ENTRYPOINT;
-        newImplementation = new Nexus(_ENTRYPOINT);
+        newImplementation = new Passport(_ENTRYPOINT);
         // /!\ The private key is for testing purposes only and should not be used in production.
         signerPrivateKey = 0x2924d554c046e633f658427df4d0e7726487b1322bd16caaf24a53099f1cda85;
         signer = vm.createWallet(signerPrivateKey);
     }
 
-    /// @notice Tests the upgrade from Smart Account V2 to Nexus and ensures initialization.
+    /// @notice Tests the upgrade from Smart Account V2 to Passport and ensures initialization.
     function test_UpgradeV2ToV3AndInitialize() public {
         checkInitialState();
         _fundAccounts();
@@ -45,7 +45,7 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
     /// @notice Validates the account ID after the upgrade process.
     function test_AccountIdValidationAfterUpgrade() public {
         test_UpgradeV2ToV3AndInitialize();
-        string memory expectedAccountId = "biconomy.nexus.1.0.0-beta.1";
+        string memory expectedAccountId = "magic.passport.1.0.0-beta.1";
         string memory actualAccountId = IAccountConfig(payable(address(smartAccountV2))).accountId();
         assertEq(actualAccountId, expectedAccountId, "Account ID does not match after upgrade.");
     }
@@ -55,7 +55,7 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
         address beforeUpgradeImplementation = IBiconomySmartAccountV2(SMART_ACCOUNT_V2_ADDRESS).getImplementation();
         assertNotEq(beforeUpgradeImplementation, address(newImplementation), "Implementation address does not match before upgrade.");
         test_UpgradeV2ToV3AndInitialize();
-        address afterUpgradeImplementation = Nexus(payable(SMART_ACCOUNT_V2_ADDRESS)).getImplementation();
+        address afterUpgradeImplementation = Passport(payable(SMART_ACCOUNT_V2_ADDRESS)).getImplementation();
         address expectedImplementation = address(newImplementation);
         assertEq(afterUpgradeImplementation, expectedImplementation, "Implementation address does not match after upgrade.");
     }
@@ -70,7 +70,7 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(usdc), 0, callData);
         PackedUserOperation[] memory userOps =
-            buildPackedUserOperation(BOB, Nexus(payable(address(SMART_ACCOUNT_V2_ADDRESS))), EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
+            buildPackedUserOperation(BOB, Passport(payable(address(SMART_ACCOUNT_V2_ADDRESS))), EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
         ENTRYPOINT_V_0_7.handleOps(userOps, payable(OWNER_ADDRESS));
         assertEq(usdc.balanceOf(recipient), amount, "USDC transfer failed");
     }
@@ -84,14 +84,14 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(recipient, amount, "");
         PackedUserOperation[] memory userOps =
-            buildPackedUserOperation(BOB, Nexus(payable(address(smartAccountV2))), EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
+            buildPackedUserOperation(BOB, Passport(payable(address(smartAccountV2))), EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
         ENTRYPOINT_V_0_7.handleOps(userOps, payable(OWNER_ADDRESS));
         assertEq(address(recipient).balance, amount, "ETH transfer failed");
     }
 
     /// @notice Prepares the initial state check before upgrade.
     function checkInitialState() internal {
-        address initialEntryPoint = Nexus(payable(address(smartAccountV2))).entryPoint();
+        address initialEntryPoint = Passport(payable(address(smartAccountV2))).entryPoint();
         assertEq(address(initialEntryPoint), ENTRYPOINT_ADDRESS, "Initial entry point mismatch.");
     }
 
@@ -116,11 +116,11 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
         BootstrapConfig memory hook = BootstrapLib.createSingleConfig(address(0), "");
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         dest[1] = address(smartAccountV2);
         values[1] = 0;
-        calldatas[1] = abi.encodeWithSelector(Nexus.initializeAccount.selector, _initData);
+        calldatas[1] = abi.encodeWithSelector(Passport.initializeAccount.selector, _initData);
 
         bytes memory batchCallData = abi.encodeWithSelector(IBiconomySmartAccountV2.executeBatch.selector, dest, values, calldatas);
 
@@ -135,10 +135,10 @@ contract ArbitrumSmartAccountUpgradeTest is NexusTest_Base, ArbitrumSettings {
 
     /// @notice Verifies the state after upgrade and initialization.
     function verifyUpgradeAndInitialization() internal {
-        address newEntryPoint = Nexus(payable(address(smartAccountV2))).entryPoint();
+        address newEntryPoint = Passport(payable(address(smartAccountV2))).entryPoint();
         assertEq(newEntryPoint, address(ENTRYPOINT_V_0_7), "Entry point should change after upgrade.");
         assertTrue(
-            Nexus(payable(address(smartAccountV2))).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""),
+            Passport(payable(address(smartAccountV2))).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""),
             "Validator module should be installed after upgrade."
         );
     }

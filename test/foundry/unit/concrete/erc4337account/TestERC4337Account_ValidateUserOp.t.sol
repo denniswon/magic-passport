@@ -2,19 +2,19 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_ValidateUserOp
 /// @notice Tests for the validateUserOp function in the ERC4337 account.
-contract TestERC4337Account_ValidateUserOp is Test, NexusTest_Base {
+contract TestERC4337Account_ValidateUserOp is Test, PassportTest_Base {
     Vm.Wallet internal signer;
-    Nexus internal account;
+    Passport internal account;
 
     /// @notice Sets up the testing environment.
     function setUp() public {
         init();
         signer = createAndFundWallet("Signer", 0.0001 ether);
-        account = deployNexus(signer, 0.0001 ether, address(VALIDATOR_MODULE));
+        account = deployPassport(signer, 0.0001 ether, address(VALIDATOR_MODULE));
     }
 
     /// @notice Tests that the prefund payment is handled with sufficient funds.
@@ -91,13 +91,9 @@ contract TestERC4337Account_ValidateUserOp is Test, NexusTest_Base {
 
         Execution[] memory executions = prepareSingleExecution(address(account), 0, "");
         PackedUserOperation[] memory userOps = buildPackedUserOperation(signer, account, EXECTYPE_TRY, executions, address(VALIDATOR_MODULE), incorrectNonce);
-        
-        bytes memory expectedRevertReason = abi.encodeWithSelector(
-            FailedOp.selector, 
-            0, 
-            "AA25 invalid account nonce"
-        );
-        
+
+        bytes memory expectedRevertReason = abi.encodeWithSelector(FailedOp.selector, 0, "AA25 invalid account nonce");
+
         vm.expectRevert(expectedRevertReason);
 
         ENTRYPOINT.handleOps(userOps, payable(address(signer.addr)));

@@ -2,12 +2,12 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import { ERC1271_MAGICVALUE, ERC1271_INVALID } from "contracts/types/Constants.sol";
 
 /// @title TestK1Validator
 /// @notice Unit tests for the K1Validator contract
-contract TestK1Validator is NexusTest_Base {
+contract TestK1Validator is PassportTest_Base {
     K1Validator private validator;
     PackedUserOperation private userOp;
     bytes32 private userOpHash;
@@ -27,10 +27,8 @@ contract TestK1Validator is NexusTest_Base {
             address(mockSafe1271Caller) //safe sender
         );
         // Prepare the call data for installing the validator module
-        bytes memory callData1 =
-            abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_VALIDATOR, address(validator), k1ValidatorSetupData);
-        bytes memory callData2 =
-            abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_VALIDATOR, address(mockSafe1271Caller), "");            
+        bytes memory callData1 = abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_VALIDATOR, address(validator), k1ValidatorSetupData);
+        bytes memory callData2 = abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_VALIDATOR, address(mockSafe1271Caller), "");
 
         // Create an execution array with the installation call data
         Execution[] memory execution = new Execution[](2);
@@ -82,7 +80,8 @@ contract TestK1Validator is NexusTest_Base {
         if (prev == address(0)) prev = address(0x01);
 
         bytes memory k1OnUninstallData = bytes("");
-        bytes memory callData = abi.encodeWithSelector(IModuleManager.uninstallModule.selector, MODULE_TYPE_VALIDATOR, address(validator), abi.encode(prev, k1OnUninstallData));
+        bytes memory callData =
+            abi.encodeWithSelector(IModuleManager.uninstallModule.selector, MODULE_TYPE_VALIDATOR, address(validator), abi.encode(prev, k1OnUninstallData));
 
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callData);
@@ -321,28 +320,22 @@ contract TestK1Validator is NexusTest_Base {
         assertEq(mockSafe1271Caller.balanceOf(address(BOB_ACCOUNT)), 0);
 
         vm.startPrank(address(BOB_ACCOUNT));
-       
-       // alternative way of setting mockSafe1271Caller as safe sender in k1 validator
-       // commented out as it was already set at setup
-       // validator.addSafeSender(address(mockSafe1271Caller));
+
+        // alternative way of setting mockSafe1271Caller as safe sender in k1 validator
+        // commented out as it was already set at setup
+        // validator.addSafeSender(address(mockSafe1271Caller));
 
         bytes32 mockUserOpHash = keccak256(abi.encodePacked("123"));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(BOB.privateKey, mockUserOpHash);
         bytes memory userOpSig = abi.encodePacked(r, s, v);
 
         bytes memory verifData = bytes("some data");
-        bytes32 secure1271Hash = keccak256(
-            abi.encode(
-                address(BOB_ACCOUNT),
-                block.chainid,
-                keccak256(verifData)
-            )
-        );
-        (v,r,s) = vm.sign(BOB.privateKey, secure1271Hash);
+        bytes32 secure1271Hash = keccak256(abi.encode(address(BOB_ACCOUNT), block.chainid, keccak256(verifData)));
+        (v, r, s) = vm.sign(BOB.privateKey, secure1271Hash);
 
         userOp.signature = abi.encode(
             verifData,
-            abi.encodePacked(address(validator), r,s,v), // erc1271sig
+            abi.encodePacked(address(validator), r, s, v), // erc1271sig
             userOpSig
         );
 
@@ -361,7 +354,7 @@ contract TestK1Validator is NexusTest_Base {
         bytes32 domainSeparator = keccak256(
             abi.encode(
                 keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
-                keccak256("Nexus"),
+                keccak256("Passport"),
                 keccak256("1.0.0-beta.1"),
                 block.chainid,
                 address(BOB_ACCOUNT)

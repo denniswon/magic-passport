@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../utils/NexusTest_Base.t.sol";
+import "../../utils/PassportTest_Base.t.sol";
 
 /// @title TestFuzz_ERC4337Account
 /// @notice This contract contains fuzz tests for ERC-4337 account operations.
-contract TestFuzz_ERC4337Account is NexusTest_Base {
+contract TestFuzz_ERC4337Account is PassportTest_Base {
     address public userAddress = address(BOB.addr);
 
     /// @notice Initializes the test environment.

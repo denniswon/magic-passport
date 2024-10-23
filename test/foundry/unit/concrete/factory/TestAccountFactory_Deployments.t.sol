@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestAccountFactory_Deployments
 /// @notice Tests for deploying accounts using the AccountFactory and various methods.
-contract TestAccountFactory_Deployments is NexusTest_Base {
+contract TestAccountFactory_Deployments is PassportTest_Base {
     Vm.Wallet public user;
     bytes initData;
 
@@ -26,7 +26,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
@@ -49,7 +49,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
@@ -72,7 +72,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         userOps[0] = buildUserOpWithInitAndCalldata(user, initCode, "", address(VALIDATOR_MODULE));
         ENTRYPOINT.depositTo{ value: 1 ether }(address(accountAddress));
         ENTRYPOINT.handleOps(userOps, payable(user.addr));
-        assertEq(IAccountConfig(accountAddress).accountId(), "biconomy.nexus.1.0.0-beta.1", "Not deployed properly");
+        assertEq(IAccountConfig(accountAddress).accountId(), "magic.passport.1.0.0-beta.1", "Not deployed properly");
     }
 
     /// @notice Tests that deploying an account fails if it already exists.
@@ -95,7 +95,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes memory factoryData = abi.encodeWithSelector(FACTORY.createAccount.selector, _initData, salt);
 
@@ -103,7 +103,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
 
         vm.prank(user.addr); // Even owner cannot reinitialize the account
         vm.expectRevert(LinkedList_AlreadyInitialized.selector);
-        INexus(firstAccountAddress).initializeAccount(factoryData);
+        IPassport(firstAccountAddress).initializeAccount(factoryData);
     }
 
     /// @notice Tests creating accounts with different indexes.
@@ -113,7 +113,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes memory saDeploymentIndex = "0";
         bytes32 salt = keccak256(saDeploymentIndex);
 
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes memory factoryData1 = abi.encodeWithSelector(FACTORY.createAccount.selector, _initData, salt);
         bytes memory factoryData2 = abi.encodeWithSelector(FACTORY.createAccount.selector, _initData, keccak256("1"));
@@ -132,13 +132,13 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes memory saDeploymentIndex = "0";
         bytes32 salt = keccak256(saDeploymentIndex);
 
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
         // Should revert if the validator module is invalid
         BootstrapConfig[] memory validatorsInvalid = BootstrapLib.createArrayConfig(address(0), initData);
-        bytes memory _initDataInvalidModule = BOOTSTRAPPER.getInitNexusScopedCalldata(validatorsInvalid, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initDataInvalidModule = BOOTSTRAPPER.getInitPassportScopedCalldata(validatorsInvalid, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         vm.expectRevert();
         address payable accountAddress = FACTORY.createAccount(_initDataInvalidModule, salt);
@@ -152,7 +152,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes memory saDeploymentIndex = "0";
         bytes32 salt = keccak256(saDeploymentIndex);
 
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         vm.expectRevert();
         // Should revert if there is not enough gas
@@ -174,7 +174,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
 
         bytes memory saDeploymentIndex = "0";
         bytes32 salt = keccak256(saDeploymentIndex);
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(configArray, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(configArray, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
@@ -185,14 +185,14 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         assertEq(deployedAccountAddress, expectedAddress, "Deployed account address mismatch");
     }
 
-    /// @notice Tests initNexusScoped function in NexusBootstrap and uses it to deploy an account with a hook module.
-    function test_initNexusScoped_WithHook_DeployAccount() public {
+    /// @notice Tests initPassportScoped function in PassportBootstrap and uses it to deploy an account with a hook module.
+    function test_initPassportScoped_WithHook_DeployAccount() public {
         BootstrapConfig[] memory validators = BootstrapLib.createArrayConfig(address(VALIDATOR_MODULE), initData);
         BootstrapConfig memory hook = BootstrapLib.createSingleConfig(address(HOOK_MODULE), abi.encodePacked(user.addr));
 
         bytes memory saDeploymentIndex = "0";
         bytes32 salt = keccak256(saDeploymentIndex);
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
@@ -204,13 +204,9 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         assertEq(deployedAccountAddress, expectedAddress, "Deployed account address mismatch");
 
         // Verify that the validators and hook were installed
+        assertTrue(IPassport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""), "Validator should be installed");
         assertTrue(
-            INexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""),
-            "Validator should be installed"
-        );
-        assertTrue(
-            INexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_HOOK, address(HOOK_MODULE), abi.encodePacked(user.addr)),
-            "Hook should be installed"
+            IPassport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_HOOK, address(HOOK_MODULE), abi.encodePacked(user.addr)), "Hook should be installed"
         );
     }
 
@@ -223,7 +219,7 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         bytes32 salt = keccak256(saDeploymentIndex);
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         // Manually compute the actual salt
         bytes32 actualSalt = keccak256(abi.encodePacked(_initData, salt));
@@ -231,22 +227,21 @@ contract TestAccountFactory_Deployments is NexusTest_Base {
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
 
         // Manually compute the expected address
-        address payable manualExpectedAddress = payable(
-            LibClone.predictDeterministicAddressERC1967(FACTORY.ACCOUNT_IMPLEMENTATION(), actualSalt, address(FACTORY))
-        );
+        address payable manualExpectedAddress =
+            payable(LibClone.predictDeterministicAddressERC1967(FACTORY.ACCOUNT_IMPLEMENTATION(), actualSalt, address(FACTORY)));
 
         // Validate that both addresses match
         assertEq(expectedAddress, manualExpectedAddress, "Manually computed address mismatch");
     }
 
-    /// @notice Tests that the Nexus contract constructor reverts if the entry point address is zero.
+    /// @notice Tests that the Passport contract constructor reverts if the entry point address is zero.
     function test_Constructor_RevertIf_EntryPointIsZero() public {
         address zeroAddress = address(0);
 
         // Expect the contract deployment to revert with the correct error message
         vm.expectRevert(EntryPointCanNotBeZero.selector);
 
-        // Try deploying the Nexus contract with an entry point address of zero
-        new Nexus(zeroAddress);
+        // Try deploying the Passport contract with an entry point address of zero
+        new Passport(zeroAddress);
     }
 }

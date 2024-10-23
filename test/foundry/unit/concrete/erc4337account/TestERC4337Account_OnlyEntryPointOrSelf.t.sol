@@ -2,11 +2,11 @@
 pragma solidity ^0.8.27;
 
 import { MODE_VALIDATION } from "contracts/types/Constants.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_OnlyEntryPointOrSelf
 /// @notice Tests for operations that should be executed only by the EntryPoint or the account itself.
-contract TestERC4337Account_OnlyEntryPointOrSelf is NexusTest_Base {
+contract TestERC4337Account_OnlyEntryPointOrSelf is PassportTest_Base {
     /// @notice Sets up the testing environment and ensures BOB_ACCOUNT has ether.
     function setUp() public {
         init();

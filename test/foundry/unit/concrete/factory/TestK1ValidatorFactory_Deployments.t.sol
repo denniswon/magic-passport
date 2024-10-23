@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import "../../../../../contracts/factory/K1ValidatorFactory.sol";
-import "../../../../../contracts/utils/NexusBootstrap.sol";
-import "../../../../../contracts/interfaces/INexus.sol";
+import "../../../../../contracts/utils/PassportBootstrap.sol";
+import "../../../../../contracts/interfaces/IPassport.sol";
 
 /// @title TestK1ValidatorFactory_Deployments
 /// @notice Tests for deploying accounts using the K1ValidatorFactory and various methods.
-contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
+contract TestK1ValidatorFactory_Deployments is PassportTest_Base {
     Vm.Wallet public user;
     bytes initData;
     K1ValidatorFactory public validatorFactory;
-    NexusBootstrap public bootstrapper;
+    PassportBootstrap public bootstrapper;
 
     /// @notice Sets up the testing environment.
     function setUp() public {
@@ -20,21 +20,16 @@ contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
         user = newWallet("user");
         vm.deal(user.addr, 1 ether);
         initData = abi.encodePacked(user.addr);
-        bootstrapper = new NexusBootstrap();
-        validatorFactory = new K1ValidatorFactory(
-            address(ACCOUNT_IMPLEMENTATION),
-            address(FACTORY_OWNER.addr),
-            address(VALIDATOR_MODULE),
-            bootstrapper,
-            REGISTRY
-        );
+        bootstrapper = new PassportBootstrap();
+        validatorFactory =
+            new K1ValidatorFactory(address(ACCOUNT_IMPLEMENTATION), address(FACTORY_OWNER.addr), address(VALIDATOR_MODULE), bootstrapper, REGISTRY);
     }
 
     /// @notice Tests if the constructor correctly initializes the factory with the given implementation, K1 Validator, and Bootstrapper addresses.
     function test_ConstructorInitializesFactory() public {
         address implementation = address(0x123);
         address k1Validator = address(0x456);
-        NexusBootstrap bootstrapperInstance = new NexusBootstrap();
+        PassportBootstrap bootstrapperInstance = new PassportBootstrap();
         K1ValidatorFactory factory = new K1ValidatorFactory(implementation, FACTORY_OWNER.addr, k1Validator, bootstrapperInstance, REGISTRY);
 
         // Verify the implementation address is set correctly
@@ -54,7 +49,7 @@ contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
     function test_ConstructorInitializesWithRegistryAddressZero() public {
         IERC7484 registry = IERC7484(address(0));
         address k1Validator = address(0x456);
-        NexusBootstrap bootstrapperInstance = new NexusBootstrap();
+        PassportBootstrap bootstrapperInstance = new PassportBootstrap();
         K1ValidatorFactory factory = new K1ValidatorFactory(address(ACCOUNT_IMPLEMENTATION), FACTORY_OWNER.addr, k1Validator, bootstrapperInstance, registry);
 
         // Verify the registry address 0
@@ -108,7 +103,7 @@ contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
 
     /// @notice Tests that the constructor reverts if the Bootstrapper address is zero.
     function test_Constructor_RevertIf_BootstrapperIsZero() public {
-        NexusBootstrap zeroBootstrapper = NexusBootstrap(payable(0));
+        PassportBootstrap zeroBootstrapper = PassportBootstrap(payable(0));
 
         // Expect the contract deployment to revert with the correct error message
         vm.expectRevert(ZeroAddressNotAllowed.selector);
@@ -130,9 +125,7 @@ contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
         assertEq(deployedAccountAddress, expectedAddress, "Deployed account address mismatch");
 
         assertEq(
-            INexus(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""),
-            true,
-            "Validator should be installed"
+            IPassport(deployedAccountAddress).isModuleInstalled(MODULE_TYPE_VALIDATOR, address(VALIDATOR_MODULE), ""), true, "Validator should be installed"
         );
     }
 
@@ -187,11 +180,8 @@ contract TestK1ValidatorFactory_Deployments is NexusTest_Base {
         // Compute the actual salt manually using keccak256
         bytes32 manualSalt = keccak256(abi.encodePacked(eoaOwner, index, attesters, threshold));
 
-        address expectedAddress = LibClone.predictDeterministicAddressERC1967(
-            address(validatorFactory.ACCOUNT_IMPLEMENTATION()),
-            manualSalt,
-            address(validatorFactory)
-        );
+        address expectedAddress =
+            LibClone.predictDeterministicAddressERC1967(address(validatorFactory.ACCOUNT_IMPLEMENTATION()), manualSalt, address(validatorFactory));
 
         address computedAddress = validatorFactory.computeAccountAddress(eoaOwner, index, attesters, threshold);
 

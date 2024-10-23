@@ -79,14 +79,14 @@ async function generateReport() {
       const gasUsed = parseInt(gasInfo.split(": ")[1], 10);
 
       const accountType = line.includes("EOA") ? "EOA" : "Smart Account";
-      const isDeployed = line.includes("Nexus") ? "True" : "False";
+      const isDeployed = line.includes("Passport") ? "True" : "False";
       const withPaymaster = line.includes("WithPaymaster") ? "True" : "False";
       const receiverAccess =
         accessType === "ColdAccess"
           ? "🧊 ColdAccess"
           : accessType === "WarmAccess"
-          ? "🔥 WarmAccess"
-          : "N/A";
+            ? "🔥 WarmAccess"
+            : "N/A";
 
       results.push({
         NUMBER: parseInt(number, 10),

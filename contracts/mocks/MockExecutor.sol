@@ -3,9 +3,19 @@ pragma solidity ^0.8.27;
 
 import { IModule } from "../interfaces/modules/IModule.sol";
 import { EncodedModuleTypes } from "../lib/ModuleTypeLib.sol";
-import { INexus } from "../interfaces/INexus.sol";
+import { IPassport } from "../interfaces/IPassport.sol";
 import { MODULE_TYPE_EXECUTOR } from "../types/Constants.sol";
-import { ModeLib, ExecutionMode, ExecType, CallType, CALLTYPE_BATCH, CALLTYPE_SINGLE, CALLTYPE_DELEGATECALL, EXECTYPE_DEFAULT, EXECTYPE_TRY } from "../lib/ModeLib.sol";
+import {
+    ModeLib,
+    ExecutionMode,
+    ExecType,
+    CallType,
+    CALLTYPE_BATCH,
+    CALLTYPE_SINGLE,
+    CALLTYPE_DELEGATECALL,
+    EXECTYPE_DEFAULT,
+    EXECTYPE_TRY
+} from "../lib/ModeLib.sol";
 import { ExecLib } from "../lib/ExecLib.sol";
 import { MODE_DEFAULT, ModePayload } from "../lib/ModeLib.sol";
 
@@ -21,41 +31,39 @@ contract MockExecutor is IExecutor {
         }
     }
 
-    function onUninstall(bytes calldata data) external override {}
+    function onUninstall(bytes calldata data) external override { }
 
-    function executeViaAccount(INexus account, address target, uint256 value, bytes calldata callData) external returns (bytes[] memory returnData) {
+    function executeViaAccount(IPassport account, address target, uint256 value, bytes calldata callData) external returns (bytes[] memory returnData) {
         return account.executeFromExecutor(ModeLib.encodeSimpleSingle(), ExecLib.encodeSingle(target, value, callData));
     }
 
-    function execDelegatecall(INexus account, bytes calldata callData) external returns (bytes[] memory returnData) {
+    function execDelegatecall(IPassport account, bytes calldata callData) external returns (bytes[] memory returnData) {
         return account.executeFromExecutor(ModeLib.encode(CALLTYPE_DELEGATECALL, EXECTYPE_DEFAULT, MODE_DEFAULT, ModePayload.wrap(0x00)), callData);
     }
 
-    function executeBatchViaAccount(INexus account, Execution[] calldata execs) external returns (bytes[] memory returnData) {
+    function executeBatchViaAccount(IPassport account, Execution[] calldata execs) external returns (bytes[] memory returnData) {
         return account.executeFromExecutor(ModeLib.encodeSimpleBatch(), ExecLib.encodeBatch(execs));
     }
 
-    function tryExecuteViaAccount(
-        INexus account,
-        address target,
-        uint256 value,
-        bytes calldata callData
-    ) external returns (bytes[] memory returnData) {
+    function tryExecuteViaAccount(IPassport account, address target, uint256 value, bytes calldata callData) external returns (bytes[] memory returnData) {
         return account.executeFromExecutor(ModeLib.encodeTrySingle(), ExecLib.encodeSingle(target, value, callData));
     }
 
-    function tryExecuteBatchViaAccount(INexus account, Execution[] calldata execs) external returns (bytes[] memory returnData) {
+    function tryExecuteBatchViaAccount(IPassport account, Execution[] calldata execs) external returns (bytes[] memory returnData) {
         return account.executeFromExecutor(ModeLib.encodeTryBatch(), ExecLib.encodeBatch(execs));
     }
 
     function customExecuteViaAccount(
         ExecutionMode mode,
-        INexus account,
+        IPassport account,
         address target,
         uint256 value,
         bytes calldata callData
-    ) external returns (bytes[] memory returnData) {
-        (CallType callType, ) = ModeLib.decodeBasic(mode);
+    )
+        external
+        returns (bytes[] memory returnData)
+    {
+        (CallType callType,) = ModeLib.decodeBasic(mode);
         bytes memory executionCallData;
         if (callType == CALLTYPE_SINGLE) {
             executionCallData = ExecLib.encodeSingle(target, value, callData);
@@ -71,11 +79,11 @@ contract MockExecutor is IExecutor {
         return moduleTypeId == MODULE_TYPE_EXECUTOR;
     }
 
-    function getModuleTypes() external view returns (EncodedModuleTypes) {}
+    function getModuleTypes() external view returns (EncodedModuleTypes) { }
 
     function isInitialized(address) external pure override returns (bool) {
         return false;
     }
 
-    receive() external payable {}
+    receive() external payable { }
 }

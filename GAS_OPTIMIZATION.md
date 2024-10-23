@@ -1,10 +1,10 @@
-# **Biconomy Smart Contract Optimization Bounty Program**
+# **Passport Smart Contract Optimization Bounty Program**
 
 ## **Introduction**
 
-Biconomy is dedicated to enhancing the efficiency and sustainability of our decentralized ecosystem. Through our **Smart Contract Optimization Bounty Program**, we invite global developers to contribute towards optimizing gas efficiency across our suite of smart contracts. This initiative is key to reducing operational costs, improving scalability, and elevating the user experience within the blockchain ecosystem.
+Magic is dedicated to enhancing the efficiency and sustainability of our decentralized ecosystem. Through our **Smart Contract Optimization Bounty Program**, we invite global developers to contribute towards optimizing gas efficiency across our suite of smart contracts. This initiative is key to reducing operational costs, improving scalability, and elevating the user experience within the blockchain ecosystem.
 
-For details on reporting security vulnerabilities or contributing to our project in other ways, please see our [SECURITY.md](./SECURITY.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) files. We value all contributions that enhance the Biconomy ecosystem, including but not limited to code optimizations and security improvements.
+For details on reporting security vulnerabilities or contributing to our project in other ways, please see our [SECURITY.md](./SECURITY.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) files. We value all contributions that enhance the Magic ecosystem, including but not limited to code optimizations and security improvements.
 
 ## **Program Objective**
 
@@ -12,7 +12,7 @@ Our goal is to maximize gas efficiency in our smart contracts while ensuring the
 
 ## **Rewards Structure**
 
-Contributors to the Biconomy Smart Contract Optimization Bounty Program will be rewarded for their efforts with **BICO tokens (ERC20)**, based on the cumulative gas savings achieved across all contracts. Furthermore, in addition to the bounty rewards, successful contributors will gain a spot in our **Contributor Hall of Fame**, where names or GitHub handles are honored within our repository and documentation, showcasing the impactful contributions made to the Biconomy ecosystem.
+Contributors to the Passport Smart Contract Optimization Bounty Program will be rewarded for their efforts with **MN tokens (ERC20)**, based on the cumulative gas savings achieved across all contracts. Furthermore, in addition to the bounty rewards, successful contributors will gain a spot in our **Contributor Hall of Fame**, where names or GitHub handles are honored within our repository and documentation, showcasing the impactful contributions made to the Magic ecosystem.
 
 ### **Reward Tiers**
 
@@ -30,7 +30,7 @@ Contributors to the Biconomy Smart Contract Optimization Bounty Program will be 
 
 ### **Implementing Changes**
 
-- **Fork the `develop` branch** of the Biconomy repository. This ensures your updates are built on the latest features and fixes, preventing overlap with existing main branch plans.
+- **Fork the `develop` branch** of the Passport repository. This ensures your updates are built on the latest features and fixes, preventing overlap with existing main branch plans.
 - Maintain code clarity and documentation through your optimizations.
 
 ### **Testing and Validation**
@@ -62,8 +62,8 @@ Submissions will be evaluated on:
 ## **Terms and Conditions**
 
 - Rewards, payable in BICO tokens, will be based on their USD value at distribution.
-- Biconomy reserves the right to alter the program's terms or discontinue at its discretion.
-- Reward tiers will be determined by the Biconomy team based on the evaluation criteria.
+- Magic reserves the right to alter the program's terms or discontinue at its discretion.
+- Reward tiers will be determined by the Magic team based on the evaluation criteria.
 
 This program is a unique opportunity for developers to showcase their expertise, contribute to a more efficient ecosystem, and earn rewards for their innovative solutions. We eagerly anticipate your contributions and the enhancements your optimizations will bring to our smart contracts.
 

@@ -1,7 +1,7 @@
 ArbitrumSmartAccountUpgradeTest
 ├── when setting up the initial state for the tests
 │   └── it should initialize variables, fork Arbitrum mainnet, and set up the state
-├── when testing the upgrade from Smart Account V2 to Nexus
+├── when testing the upgrade from Smart Account V2 to Passport
 │   └── it should ensure initialization after the upgrade
 ├── when validating the account ID after the upgrade process
 │   └── it should match the expected account ID after upgrade

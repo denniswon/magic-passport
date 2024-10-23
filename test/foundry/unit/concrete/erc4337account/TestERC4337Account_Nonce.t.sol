@@ -3,11 +3,11 @@ pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
 import { MODE_VALIDATION } from "contracts/types/Constants.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 
 /// @title TestERC4337Account_Nonce
 /// @notice Tests for nonce management in the ERC4337 account.
-contract TestERC4337Account_Nonce is NexusTest_Base {
+contract TestERC4337Account_Nonce is PassportTest_Base {
     Counter public counter;
     bytes1 vMode = MODE_VALIDATION;
 
@@ -19,11 +19,7 @@ contract TestERC4337Account_Nonce is NexusTest_Base {
 
     function test_InitialNonce() public {
         uint256 nonce = ENTRYPOINT.getNonce(address(BOB_ACCOUNT), makeNonceKey(vMode, address(VALIDATOR_MODULE), bytes3(0)));
-        assertEq(
-            BOB_ACCOUNT.nonce(makeNonceKey(vMode, address(VALIDATOR_MODULE), bytes3(0))),
-            nonce,
-            "Nonce in the account and EP should be same"
-        );
+        assertEq(BOB_ACCOUNT.nonce(makeNonceKey(vMode, address(VALIDATOR_MODULE), bytes3(0))), nonce, "Nonce in the account and EP should be same");
     }
 
     function test_NonceIncrementAfterOperation() public {

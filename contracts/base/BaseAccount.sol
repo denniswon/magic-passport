@@ -9,23 +9,19 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IEntryPoint } from "account-abstraction/interfaces/IEntryPoint.sol";
 import { IBaseAccount } from "../interfaces/base/IBaseAccount.sol";
 
-/// @title Nexus - BaseAccount
-/// @notice Implements ERC-4337 and ERC-7579 standards for account management and access control within the Nexus suite.
+/// @title Passport - BaseAccount
+/// @notice Implements ERC-4337 and ERC-7579 standards for account management and access control within the Passport suite.
 /// @dev Manages entry points and configurations as specified in the ERC-4337 and ERC-7579 documentation.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 contract BaseAccount is IBaseAccount {
     /// @notice Identifier for this implementation on the network
-    string internal constant _ACCOUNT_IMPLEMENTATION_ID = "biconomy.nexus.1.0.0-beta.1";
+    string internal constant _ACCOUNT_IMPLEMENTATION_ID = "magic.passport.1.0.0-beta.1";
 
     /// @notice The canonical address for the ERC4337 EntryPoint contract, version 0.7.
     /// This address is consistent across all supported networks.
@@ -69,9 +65,7 @@ contract BaseAccount is IBaseAccount {
         /// @solidity memory-safe-assembly
         assembly {
             // The EntryPoint has balance accounting logic in the `receive()` function.
-            if iszero(call(gas(), entryPointAddress, callvalue(), codesize(), 0x00, codesize(), 0x00)) {
-                revert(codesize(), 0x00)
-            } // For gas estimation.
+            if iszero(call(gas(), entryPointAddress, callvalue(), codesize(), 0x00, codesize(), 0x00)) { revert(codesize(), 0x00) } // For gas estimation.
         }
     }
 
@@ -108,15 +102,16 @@ contract BaseAccount is IBaseAccount {
         assembly {
             mstore(0x20, address()) // Store the `account` argument.
             mstore(0x00, 0x70a08231) // `balanceOf(address)`.
-            result := mul(
-                // Returns 0 if the EntryPoint does not exist.
-                mload(0x20),
-                and(
-                    // The arguments of `and` are evaluated from right to left.
-                    gt(returndatasize(), 0x1f), // At least 32 bytes returned.
-                    staticcall(gas(), entryPointAddress, 0x1c, 0x24, 0x20, 0x20)
+            result :=
+                mul(
+                    // Returns 0 if the EntryPoint does not exist.
+                    mload(0x20),
+                    and(
+                        // The arguments of `and` are evaluated from right to left.
+                        gt(returndatasize(), 0x1f), // At least 32 bytes returned.
+                        staticcall(gas(), entryPointAddress, 0x1c, 0x24, 0x20, 0x20)
+                    )
                 )
-            )
         }
     }
 

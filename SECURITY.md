@@ -8,15 +8,13 @@ The safety and security of our smart contract platform is our top priority. If y
 
 For critical or high-impact vulnerabilities that could affect our users, **please contact us directly** at:
 
-- Email: security@biconomy.io
-
 We'll work with you to assess and understand the scope of the issue.
 
 ### For Other Issues
 
 For vulnerabilities that are less critical and do not immediately affect our users:
 
-1. Open an issue in our GitHub repository (`https://github.com/bcnmy/nexus/issues`).
+1. Open an issue in our GitHub repository (`https://github.com/denniswon/passport/issues`).
 
 2. Provide detailed information about the issue and steps to reproduce.
 
@@ -70,4 +68,4 @@ To be eligible for a bounty, researchers must:
 
 By submitting a vulnerability report, you agree to comply with our responsible disclosure process. Public disclosure of the vulnerability without consent from us will render the vulnerability ineligible for a bounty.
 
-Thank you for helping to keep Biconomy 🍊 and the blockchain community safe!
+Thank you for helping to keep Passport and the blockchain community safe!

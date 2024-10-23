@@ -1,10 +1,10 @@
 {
-  "name": "nexus",
-  "description": "Nexus - ERC7579 Modular Smart Account",
+  "name": "passport",
+  "description": "Passport - ERC7579 Modular Smart Account",
   "version": "1.0.0-beta.1",
   "author": {
-    "name": "Biconomy",
-    "url": "https://github.com/bcnmy"
+    "name": "magiclabs",
+    "url": "https://github.com/magiclabs"
   },
   "dependencies": {
     "@openzeppelin": "https://github.com/OpenZeppelin/openzeppelin-contracts/",
@@ -38,7 +38,7 @@
     "typescript": ">=5.4.5"
   },
   "keywords": [
-    "nexus",
+    "passport",
     "erc7579",
     "erc-7579",
     "modular smart account",

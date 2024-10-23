@@ -9,16 +9,12 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 /// @title Execution Manager Events and Errors Interface
 /// @notice Interface for defining events and errors related to transaction execution processes within smart accounts.
 /// @dev This interface defines events and errors used by execution manager to handle and report the operational status of smart account transactions.
-/// It is a part of the Nexus suite of contracts aimed at implementing flexible and secure smart account operations.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
+/// It is a part of the Passport suite of contracts aimed at implementing flexible and secure smart account operations.
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 interface IBaseAccountEventsAndErrors {

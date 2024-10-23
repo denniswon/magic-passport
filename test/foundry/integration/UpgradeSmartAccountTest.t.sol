@@ -2,9 +2,9 @@
 pragma solidity ^0.8.27;
 
 import "../utils/Imports.sol";
-import "../utils/NexusTest_Base.t.sol";
+import "../utils/PassportTest_Base.t.sol";
 
-contract UpgradeSmartAccountTest is NexusTest_Base {
+contract UpgradeSmartAccountTest is PassportTest_Base {
     function setUp() public {
         init();
     }
@@ -24,8 +24,8 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
     /// @notice Tests the upgrade of the smart account implementation
     function test_upgradeImplementation() public {
         address _ENTRYPOINT = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
-        Nexus newSmartAccount = new Nexus(_ENTRYPOINT);
-        bytes memory callData = abi.encodeWithSelector(Nexus.upgradeToAndCall.selector, address(newSmartAccount), "");
+        Passport newSmartAccount = new Passport(_ENTRYPOINT);
+        bytes memory callData = abi.encodeWithSelector(Passport.upgradeToAndCall.selector, address(newSmartAccount), "");
 
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callData);
@@ -39,8 +39,8 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
     /// @notice Tests the upgrade of the smart account implementation with invalid call data
     function test_upgradeImplementation_invalidCallData() public {
         address _ENTRYPOINT = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
-        Nexus newSmartAccount = new Nexus(_ENTRYPOINT);
-        bytes memory callData = abi.encodeWithSelector(Nexus.upgradeToAndCall.selector, address(newSmartAccount), bytes(hex"1234"));
+        Passport newSmartAccount = new Passport(_ENTRYPOINT);
+        bytes memory callData = abi.encodeWithSelector(Passport.upgradeToAndCall.selector, address(newSmartAccount), bytes(hex"1234"));
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callData);
         PackedUserOperation[] memory userOps = buildPackedUserOperation(BOB, BOB_ACCOUNT, EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
@@ -59,7 +59,7 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
 
     function test_upgradeImplementation_invalidCaller() public {
         address _ENTRYPOINT = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
-        Nexus newSmartAccount = new Nexus(_ENTRYPOINT);
+        Passport newSmartAccount = new Passport(_ENTRYPOINT);
         vm.expectRevert(abi.encodeWithSelector(AccountAccessUnauthorized.selector));
         BOB_ACCOUNT.upgradeToAndCall(address(newSmartAccount), "");
     }
@@ -67,7 +67,7 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
     /// @notice Tests the upgrade of the smart account implementation with an invalid address
     function test_upgradeImplementation_InvalidAddress() public {
         /// @note "" means empty calldata. this will just update the implementation but not setup the account.
-        bytes memory callData = abi.encodeWithSelector(Nexus.upgradeToAndCall.selector, address(0), "");
+        bytes memory callData = abi.encodeWithSelector(Passport.upgradeToAndCall.selector, address(0), "");
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callData);
         PackedUserOperation[] memory userOps = buildPackedUserOperation(BOB, BOB_ACCOUNT, EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
@@ -87,7 +87,7 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
     /// @notice Tests the upgrade of the smart account implementation with an invalid address
     function test_upgradeImplementation_InvalidAddress_NotAContract() public {
         /// @note "" means empty calldata. this will just update the implementation but not setup the account.
-        bytes memory callData = abi.encodeWithSelector(Nexus.upgradeToAndCall.selector, BOB.addr, "");
+        bytes memory callData = abi.encodeWithSelector(Passport.upgradeToAndCall.selector, BOB.addr, "");
         Execution[] memory execution = new Execution[](1);
         execution[0] = Execution(address(BOB_ACCOUNT), 0, callData);
         PackedUserOperation[] memory userOps = buildPackedUserOperation(BOB, BOB_ACCOUNT, EXECTYPE_DEFAULT, execution, address(VALIDATOR_MODULE), 0);
@@ -120,7 +120,7 @@ contract UpgradeSmartAccountTest is NexusTest_Base {
         test_proxiableUUIDSlot();
         test_currentImplementationAddress();
         address _ENTRYPOINT = 0x0000000071727De22E5E9d8BAf0edAc6f37da032;
-        Nexus newSmartAccount = new Nexus(_ENTRYPOINT);
+        Passport newSmartAccount = new Passport(_ENTRYPOINT);
         vm.expectRevert(abi.encodeWithSelector(AccountAccessUnauthorized.selector));
         BOB_ACCOUNT.upgradeToAndCall(address(newSmartAccount), "");
     }

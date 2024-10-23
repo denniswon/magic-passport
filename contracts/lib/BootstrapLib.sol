@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import { BootstrapConfig } from "../utils/NexusBootstrap.sol";
+import { BootstrapConfig } from "../utils/PassportBootstrap.sol";
 
-/// @title NexusBootstrap Configuration Library
+/// @title PassportBootstrap Configuration Library
 /// @notice Provides utility functions to create and manage BootstrapConfig structures.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 library BootstrapLib {

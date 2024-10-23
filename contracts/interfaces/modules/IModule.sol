@@ -9,16 +9,12 @@ pragma solidity ^0.8.27;
 // /_/ |_/\___/_/|_\__,_/____/
 //
 // ──────────────────────────────────────────────────────────────────────────────
-// Nexus: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337, developed by Biconomy.
-// Learn more at https://biconomy.io. To report security issues, please contact us at: security@biconomy.io
+// Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
-/// @title Nexus - ERC-7579 Module Base Interface
+/// @title Passport - ERC-7579 Module Base Interface
 /// @notice Interface for module management in smart accounts, complying with ERC-7579 specifications.
 /// @dev Defines the lifecycle hooks and checks for modules within the smart account architecture.
 /// This interface includes methods for installing, uninstalling, and verifying module types and initialization status.
-/// @author @livingrockrises | Biconomy | chirag@biconomy.io
-/// @author @aboudjem | Biconomy | adam.boudjemaa@biconomy.io
-/// @author @filmakarov | Biconomy | filipp.makarov@biconomy.io
 /// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
 /// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
 interface IModule {

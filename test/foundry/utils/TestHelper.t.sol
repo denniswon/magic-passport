@@ -11,7 +11,7 @@ import "./CheatCodes.sol";
 import "./EventsAndErrors.sol";
 import "../../../contracts/lib/ModeLib.sol";
 import "../../../contracts/lib/ExecLib.sol";
-import { Nexus } from "../../../contracts/Nexus.sol";
+import { Passport } from "../../../contracts/Passport.sol";
 import { MockHook } from "../../../contracts/mocks/MockHook.sol";
 import { MockHandler } from "../../../contracts/mocks/MockHandler.sol";
 import { MockExecutor } from "../../../contracts/mocks/MockExecutor.sol";
@@ -19,9 +19,9 @@ import { MockDelegateTarget } from "../../../contracts/mocks/MockDelegateTarget.
 import { MockValidator } from "../../../contracts/mocks/MockValidator.sol";
 import { MockMultiModule } from "contracts/mocks/MockMultiModule.sol";
 import { MockPaymaster } from "./../../../contracts/mocks/MockPaymaster.sol";
-import { NexusBootstrap, BootstrapConfig } from "../../../contracts/utils/NexusBootstrap.sol";
-import { BiconomyMetaFactory } from "../../../contracts/factory/BiconomyMetaFactory.sol";
-import { NexusAccountFactory } from "../../../contracts/factory/NexusAccountFactory.sol";
+import { PassportBootstrap, BootstrapConfig } from "../../../contracts/utils/PassportBootstrap.sol";
+import { PassportMetaFactory } from "../../../contracts/factory/PassportMetaFactory.sol";
+import { PassportAccountFactory } from "../../../contracts/factory/PassportAccountFactory.sol";
 import { BootstrapLib } from "../../../contracts/lib/BootstrapLib.sol";
 import { MODE_VALIDATION } from "../../../contracts/types/Constants.sol";
 import { MockRegistry } from "../../../contracts/mocks/MockRegistry.sol";
@@ -46,22 +46,22 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     address[] internal ATTESTERS;
     uint8 internal THRESHOLD;
 
-    Nexus internal BOB_ACCOUNT;
-    Nexus internal ALICE_ACCOUNT;
-    Nexus internal CHARLIE_ACCOUNT;
+    Passport internal BOB_ACCOUNT;
+    Passport internal ALICE_ACCOUNT;
+    Passport internal CHARLIE_ACCOUNT;
 
     IEntryPoint internal ENTRYPOINT;
-    NexusAccountFactory internal FACTORY;
-    BiconomyMetaFactory internal META_FACTORY;
+    PassportAccountFactory internal FACTORY;
+    PassportMetaFactory internal META_FACTORY;
     MockRegistry internal REGISTRY;
     MockHook internal HOOK_MODULE;
     MockHandler internal HANDLER_MODULE;
     MockExecutor internal EXECUTOR_MODULE;
     MockValidator internal VALIDATOR_MODULE;
     MockMultiModule internal MULTI_MODULE;
-    Nexus internal ACCOUNT_IMPLEMENTATION;
+    Passport internal ACCOUNT_IMPLEMENTATION;
 
-    NexusBootstrap internal BOOTSTRAPPER;
+    PassportBootstrap internal BOOTSTRAPPER;
 
     // -----------------------------------------
     // Setup Functions
@@ -71,7 +71,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         /// Initializes the testing environment
         setupPredefinedWallets();
         deployTestContracts();
-        deployNexusForPredefinedWallets();
+        deployPassportForPredefinedWallets();
     }
 
     function createAndFundWallet(string memory name, uint256 amount) internal returns (Vm.Wallet memory) {
@@ -106,9 +106,9 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         ENTRYPOINT = new EntryPoint();
         vm.etch(address(0x0000000071727De22E5E9d8BAf0edAc6f37da032), address(ENTRYPOINT).code);
         ENTRYPOINT = IEntryPoint(0x0000000071727De22E5E9d8BAf0edAc6f37da032);
-        ACCOUNT_IMPLEMENTATION = new Nexus(address(ENTRYPOINT));
-        FACTORY = new NexusAccountFactory(address(ACCOUNT_IMPLEMENTATION), address(FACTORY_OWNER.addr));
-        META_FACTORY = new BiconomyMetaFactory(address(FACTORY_OWNER.addr));
+        ACCOUNT_IMPLEMENTATION = new Passport(address(ENTRYPOINT));
+        FACTORY = new PassportAccountFactory(address(ACCOUNT_IMPLEMENTATION), address(FACTORY_OWNER.addr));
+        META_FACTORY = new PassportMetaFactory(address(FACTORY_OWNER.addr));
         vm.prank(FACTORY_OWNER.addr);
         META_FACTORY.addFactoryToWhitelist(address(FACTORY));
         HOOK_MODULE = new MockHook();
@@ -116,7 +116,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         EXECUTOR_MODULE = new MockExecutor();
         VALIDATOR_MODULE = new MockValidator();
         MULTI_MODULE = new MockMultiModule();
-        BOOTSTRAPPER = new NexusBootstrap();
+        BOOTSTRAPPER = new PassportBootstrap();
         REGISTRY = new MockRegistry();
     }
 
@@ -127,8 +127,8 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     /// @param wallet The wallet to deploy the account for
     /// @param deposit The deposit amount
     /// @param validator The custom validator address, if not provided uses default
-    /// @return The deployed Nexus account
-    function deployNexus(Vm.Wallet memory wallet, uint256 deposit, address validator) internal returns (Nexus) {
+    /// @return The deployed Passport account
+    function deployPassport(Vm.Wallet memory wallet, uint256 deposit, address validator) internal returns (Passport) {
         address payable accountAddress = calculateAccountAddress(wallet.addr, validator);
         bytes memory initCode = buildInitCode(wallet.addr, validator);
 
@@ -138,16 +138,16 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         ENTRYPOINT.depositTo{ value: deposit }(address(accountAddress));
         ENTRYPOINT.handleOps(userOps, payable(wallet.addr));
         assertTrue(MockValidator(validator).isOwner(accountAddress, wallet.addr));
-        return Nexus(accountAddress);
+        return Passport(accountAddress);
     }
 
-    /// @notice Deploys Nexus accounts for predefined wallets
-    function deployNexusForPredefinedWallets() internal {
-        BOB_ACCOUNT = deployNexus(BOB, 100 ether, address(VALIDATOR_MODULE));
+    /// @notice Deploys Passport accounts for predefined wallets
+    function deployPassportForPredefinedWallets() internal {
+        BOB_ACCOUNT = deployPassport(BOB, 100 ether, address(VALIDATOR_MODULE));
         vm.label(address(BOB_ACCOUNT), "BOB_ACCOUNT");
-        ALICE_ACCOUNT = deployNexus(ALICE, 100 ether, address(VALIDATOR_MODULE));
+        ALICE_ACCOUNT = deployPassport(ALICE, 100 ether, address(VALIDATOR_MODULE));
         vm.label(address(ALICE_ACCOUNT), "ALICE_ACCOUNT");
-        CHARLIE_ACCOUNT = deployNexus(CHARLIE, 100 ether, address(VALIDATOR_MODULE));
+        CHARLIE_ACCOUNT = deployPassport(CHARLIE, 100 ether, address(VALIDATOR_MODULE));
         vm.label(address(CHARLIE_ACCOUNT), "CHARLIE_ACCOUNT");
     }
     // -----------------------------------------
@@ -166,7 +166,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         bytes memory saDeploymentIndex = "0";
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
         bytes32 salt = keccak256(saDeploymentIndex);
 
         account = FACTORY.computeAccountAddress(_initData, salt);
@@ -186,15 +186,14 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         bytes memory saDeploymentIndex = "0";
 
         // Create initcode and salt to be sent to Factory
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes32 salt = keccak256(saDeploymentIndex);
 
         bytes memory factoryData = abi.encodeWithSelector(FACTORY.createAccount.selector, _initData, salt);
 
         // Prepend the factory address to the encoded function call to form the initCode
-        initCode =
-            abi.encodePacked(address(META_FACTORY), abi.encodeWithSelector(META_FACTORY.deployWithFactory.selector, address(FACTORY), factoryData));
+        initCode = abi.encodePacked(address(META_FACTORY), abi.encodeWithSelector(META_FACTORY.deployWithFactory.selector, address(FACTORY), factoryData));
     }
 
     /// @notice Prepares a user operation with init code and call data
@@ -318,10 +317,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     /// @param execType The execution type
     /// @param executions The executions to include
     /// @return executionCalldata The prepared callData
-    function prepareERC7579ExecuteCallData(
-        ExecType execType, 
-        Execution[] memory executions
-    ) internal virtual view returns (bytes memory executionCalldata) {
+    function prepareERC7579ExecuteCallData(ExecType execType, Execution[] memory executions) internal view virtual returns (bytes memory executionCalldata) {
         // Determine mode and calldata based on callType and executions length
         ExecutionMode mode;
         uint256 length = executions.length;
@@ -329,10 +325,10 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         if (length == 1) {
             mode = (execType == EXECTYPE_DEFAULT) ? ModeLib.encodeSimpleSingle() : ModeLib.encodeTrySingle();
             executionCalldata =
-                abi.encodeCall(Nexus.execute, (mode, ExecLib.encodeSingle(executions[0].target, executions[0].value, executions[0].callData)));
+                abi.encodeCall(Passport.execute, (mode, ExecLib.encodeSingle(executions[0].target, executions[0].value, executions[0].callData)));
         } else if (length > 1) {
             mode = (execType == EXECTYPE_DEFAULT) ? ModeLib.encodeSimpleBatch() : ModeLib.encodeTryBatch();
-            executionCalldata = abi.encodeCall(Nexus.execute, (mode, ExecLib.encodeBatch(executions)));
+            executionCalldata = abi.encodeCall(Passport.execute, (mode, ExecLib.encodeBatch(executions)));
         } else {
             revert("Executions array cannot be empty");
         }
@@ -345,33 +341,39 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     /// @param data The call data
     /// @return executionCalldata The prepared callData
     function prepareERC7579SingleExecuteCallData(
-        ExecType execType, 
+        ExecType execType,
         address target,
         uint256 value,
         bytes memory data
-    ) internal virtual view returns (bytes memory executionCalldata) {
+    )
+        internal
+        view
+        virtual
+        returns (bytes memory executionCalldata)
+    {
         ExecutionMode mode;
         mode = (execType == EXECTYPE_DEFAULT) ? ModeLib.encodeSimpleSingle() : ModeLib.encodeTrySingle();
-        executionCalldata = abi.encodeCall(
-            Nexus.execute,
-            (mode, ExecLib.encodeSingle(target, value, data))
-        );
+        executionCalldata = abi.encodeCall(Passport.execute, (mode, ExecLib.encodeSingle(target, value, data)));
     }
 
     /// @notice Prepares a packed user operation with specified parameters
     /// @param signer The wallet to sign the operation
-    /// @param account The Nexus account
+    /// @param account The Passport account
     /// @param execType The execution type
     /// @param executions The executions to include
     /// @return userOps The prepared packed user operations
     function buildPackedUserOperation(
         Vm.Wallet memory signer,
-        Nexus account,
+        Passport account,
         ExecType execType,
         Execution[] memory executions,
         address validator,
-        uint256 nonce 
-    ) internal view returns (PackedUserOperation[] memory userOps) {
+        uint256 nonce
+    )
+        internal
+        view
+        returns (PackedUserOperation[] memory userOps)
+    {
         // Validate execType
         require(execType == EXECTYPE_DEFAULT || execType == EXECTYPE_TRY, "Invalid ExecType");
 
@@ -379,7 +381,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
         userOps = new PackedUserOperation[](1);
 
         uint256 nonceToUse;
-        if(nonce == 0) {
+        if (nonce == 0) {
             nonceToUse = getNonce(address(account), MODE_VALIDATION, validator, bytes3(0));
         } else {
             nonceToUse = nonce;
@@ -504,16 +506,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     }
 
     /// @notice Helper function to execute a single operation.
-    function executeSingle(
-        Vm.Wallet memory user,
-        Nexus userAccount,
-        address target,
-        uint256 value,
-        bytes memory callData,
-        ExecType execType
-    )
-        internal
-    {
+    function executeSingle(Vm.Wallet memory user, Passport userAccount, address target, uint256 value, bytes memory callData, ExecType execType) internal {
         Execution[] memory executions = new Execution[](1);
         executions[0] = Execution({ target: target, value: value, callData: callData });
 
@@ -522,7 +515,7 @@ contract TestHelper is CheatCodes, EventsAndErrors {
     }
 
     /// @notice Helper function to execute a batch of operations.
-    function executeBatch(Vm.Wallet memory user, Nexus userAccount, Execution[] memory executions, ExecType execType) internal {
+    function executeBatch(Vm.Wallet memory user, Passport userAccount, Execution[] memory executions, ExecType execType) internal {
         PackedUserOperation[] memory userOps = buildPackedUserOperation(user, userAccount, execType, executions, address(VALIDATOR_MODULE), 0);
         ENTRYPOINT.handleOps(userOps, payable(user.addr));
     }

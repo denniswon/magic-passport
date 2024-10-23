@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../utils/NexusTest_Base.t.sol";
+import "../../utils/PassportTest_Base.t.sol";
 
 /// @title TestFuzz_AccountFactory_Deployment
-/// @notice Fuzz tests for deploying accounts using the NexusAccountFactory.
-contract TestFuzz_AccountFactory_Deployment is NexusTest_Base {
+/// @notice Fuzz tests for deploying accounts using the PassportAccountFactory.
+contract TestFuzz_AccountFactory_Deployment is PassportTest_Base {
     function setUp() public {
         init();
     }
@@ -25,7 +25,7 @@ contract TestFuzz_AccountFactory_Deployment is NexusTest_Base {
 
         BootstrapConfig[] memory validators = BootstrapLib.createMultipleConfigs(modules, datas);
         BootstrapConfig memory hook = BootstrapLib.createSingleConfig(address(0), "");
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes32 salt = keccak256(abi.encodePacked(randomSeed));
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
@@ -49,7 +49,7 @@ contract TestFuzz_AccountFactory_Deployment is NexusTest_Base {
 
         BootstrapConfig[] memory validators = BootstrapLib.createMultipleConfigs(modules, datas);
         BootstrapConfig memory hook = BootstrapLib.createSingleConfig(address(0), "");
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes32 salt = keccak256(abi.encodePacked(largeIndex));
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);
@@ -73,7 +73,7 @@ contract TestFuzz_AccountFactory_Deployment is NexusTest_Base {
 
         BootstrapConfig[] memory validators = BootstrapLib.createMultipleConfigs(modules, datas);
         BootstrapConfig memory hook = BootstrapLib.createSingleConfig(address(0), "");
-        bytes memory _initData = BOOTSTRAPPER.getInitNexusScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
+        bytes memory _initData = BOOTSTRAPPER.getInitPassportScopedCalldata(validators, hook, REGISTRY, ATTESTERS, THRESHOLD);
 
         bytes32 salt = keccak256(abi.encodePacked(randomSeed));
         address payable expectedAddress = FACTORY.computeAccountAddress(_initData, salt);

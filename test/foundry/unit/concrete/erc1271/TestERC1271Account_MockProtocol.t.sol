@@ -2,14 +2,14 @@
 pragma solidity ^0.8.27;
 
 import "../../../utils/Imports.sol";
-import "../../../utils/NexusTest_Base.t.sol";
+import "../../../utils/PassportTest_Base.t.sol";
 import { TokenWithPermit } from "../../../../../contracts/mocks/TokenWithPermit.sol";
 
 /// @title TestERC1271Account_MockProtocol
 /// @notice This contract tests the ERC1271 signature validation with a mock protocol and mock validator.
-contract TestERC1271Account_MockProtocol is NexusTest_Base {
-
+contract TestERC1271Account_MockProtocol is PassportTest_Base {
     K1Validator private validator;
+
     struct TestTemps {
         bytes32 userOpHash;
         bytes32 contents;
@@ -42,12 +42,7 @@ contract TestERC1271Account_MockProtocol is NexusTest_Base {
         TestTemps memory t;
         t.contents = keccak256(
             abi.encode(
-                permitToken.PERMIT_TYPEHASH_LOCAL(),
-                address(ALICE_ACCOUNT),
-                address(0x69),
-                1e18,
-                permitToken.nonces(address(ALICE_ACCOUNT)),
-                block.timestamp
+                permitToken.PERMIT_TYPEHASH_LOCAL(), address(ALICE_ACCOUNT), address(0x69), 1e18, permitToken.nonces(address(ALICE_ACCOUNT)), block.timestamp
             )
         );
         (t.v, t.r, t.s) = vm.sign(ALICE.privateKey, toERC1271Hash(t.contents, address(ALICE_ACCOUNT)));
@@ -72,7 +67,7 @@ contract TestERC1271Account_MockProtocol is NexusTest_Base {
 
     function testDomainSeparator() public {
         bytes32 expectedDomainSeparator = BOB_ACCOUNT.DOMAIN_SEPARATOR();
-        
+
         AccountDomainStruct memory t;
         (t.fields, t.name, t.version, t.chainId, t.verifyingContract, t.salt, t.extensions) = BOB_ACCOUNT.eip712Domain();
 
@@ -93,12 +88,7 @@ contract TestERC1271Account_MockProtocol is NexusTest_Base {
         TestTemps memory t;
         t.contents = keccak256(
             abi.encode(
-                permitToken.PERMIT_TYPEHASH_LOCAL(),
-                address(ALICE_ACCOUNT),
-                address(0x69),
-                1e18,
-                permitToken.nonces(address(ALICE_ACCOUNT)),
-                block.timestamp
+                permitToken.PERMIT_TYPEHASH_LOCAL(), address(ALICE_ACCOUNT), address(0x69), 1e18, permitToken.nonces(address(ALICE_ACCOUNT)), block.timestamp
             )
         );
         (t.v, t.r, t.s) = vm.sign(BOB.privateKey, toERC1271Hash(t.contents, address(ALICE_ACCOUNT)));
@@ -117,12 +107,7 @@ contract TestERC1271Account_MockProtocol is NexusTest_Base {
         TestTemps memory t;
         t.contents = keccak256(
             abi.encode(
-                permitToken.PERMIT_TYPEHASH_LOCAL(),
-                address(ALICE_ACCOUNT),
-                address(0x69),
-                1e6,
-                permitToken.nonces(address(ALICE_ACCOUNT)),
-                block.timestamp
+                permitToken.PERMIT_TYPEHASH_LOCAL(), address(ALICE_ACCOUNT), address(0x69), 1e6, permitToken.nonces(address(ALICE_ACCOUNT)), block.timestamp
             )
         );
         (t.v, t.r, t.s) = vm.sign(BOB.privateKey, toERC1271Hash(t.contents, address(ALICE_ACCOUNT)));
@@ -179,29 +164,23 @@ contract TestERC1271Account_MockProtocol is NexusTest_Base {
         AccountDomainStruct memory t;
         (t.fields, t.name, t.version, t.chainId, t.verifyingContract, t.salt, t.extensions) = EIP712(account).eip712Domain();
 
-        return
-            abi.encode(
-                t.fields,
-                keccak256(bytes(t.name)),
-                keccak256(bytes(t.version)),
-                t.chainId,
-                t.verifyingContract, // Use the account address as the verifying contract.
-                t.salt,
-                keccak256(abi.encodePacked(t.extensions))
-            );
+        return abi.encode(
+            t.fields,
+            keccak256(bytes(t.name)),
+            keccak256(bytes(t.version)),
+            t.chainId,
+            t.verifyingContract, // Use the account address as the verifying contract.
+            t.salt,
+            keccak256(abi.encodePacked(t.extensions))
+        );
     }
 
     /// @notice Helper function to install a validator module to a specific deployed Smart Account.
     /// @param account The Smart Account to which the validator will be installed.
     /// @param user The wallet executing the operation.
-    function installK1Validator(Nexus account, Vm.Wallet memory user) internal {
+    function installK1Validator(Passport account, Vm.Wallet memory user) internal {
         // Prepare call data for installing the validator module
-        bytes memory callData = abi.encodeWithSelector(
-            IModuleManager.installModule.selector,
-            MODULE_TYPE_VALIDATOR,
-            validator,
-            abi.encodePacked(user.addr)
-        );
+        bytes memory callData = abi.encodeWithSelector(IModuleManager.installModule.selector, MODULE_TYPE_VALIDATOR, validator, abi.encodePacked(user.addr));
 
         // Prepare execution array
         Execution[] memory execution = new Execution[](1);

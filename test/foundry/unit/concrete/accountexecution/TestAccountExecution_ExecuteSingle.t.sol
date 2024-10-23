@@ -100,7 +100,7 @@ contract TestAccountExecution_ExecuteSingle is TestAccountExecution_Base {
     /// @notice Tests token transfer in single execution
     function test_ExecuteSingle_TokenTransfer() public {
         uint256 transferAmount = 100 * 10 ** token.decimals();
-        // Assuming the Nexus has been funded with tokens in the setUp()
+        // Assuming the Passport has been funded with tokens in the setUp()
 
         // Encode the token transfer call
         Execution[] memory execution = new Execution[](1);
@@ -109,7 +109,7 @@ contract TestAccountExecution_ExecuteSingle is TestAccountExecution_Base {
         // Prepare and execute the UserOperation
         PackedUserOperation[] memory userOps = buildPackedUserOperation(
             BOB, // Sender of the operation
-            BOB_ACCOUNT, // Nexus executing the operation
+            BOB_ACCOUNT, // Passport executing the operation
             EXECTYPE_DEFAULT,
             execution,
             address(VALIDATOR_MODULE),
@@ -196,7 +196,7 @@ contract TestAccountExecution_ExecuteSingle is TestAccountExecution_Base {
         // Determine mode and calldata based on execType and executions length
         ExecutionMode mode = ModeLib.encodeCustom(callType, unsupportedExecType);
         bytes memory executionCalldata =
-            abi.encodeCall(Nexus.execute, (mode, ExecLib.encodeSingle(execution[0].target, execution[0].value, execution[0].callData)));
+            abi.encodeCall(Passport.execute, (mode, ExecLib.encodeSingle(execution[0].target, execution[0].value, execution[0].callData)));
 
         // Initialize the userOps array with one operation
         PackedUserOperation[] memory userOps = new PackedUserOperation[](1);
