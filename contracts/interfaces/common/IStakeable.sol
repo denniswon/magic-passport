@@ -1,21 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 /// @title Stakeable Entity Interface
 /// @notice Interface for staking, unlocking, and withdrawing Ether on an EntryPoint.
 /// @dev Defines functions for managing stakes on an EntryPoint.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IStakeable {
     /// @notice Stakes a certain amount of Ether on an EntryPoint.
     /// @dev The contract should have enough Ether to cover the stake.

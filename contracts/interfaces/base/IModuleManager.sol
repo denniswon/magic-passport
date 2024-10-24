@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IModuleManagerEventsAndErrors } from "./IModuleManagerEventsAndErrors.sol";
@@ -16,8 +8,7 @@ import { IModuleManagerEventsAndErrors } from "./IModuleManagerEventsAndErrors.s
 /// @title Passport - IModuleManager
 /// @notice Interface for managing modules within Smart Accounts, providing methods for installation and removal of modules.
 /// @dev Extends the IModuleManagerEventsAndErrors interface to include event and error definitions.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IModuleManager is IModuleManagerEventsAndErrors {
     /// @notice Installs a Module of a specific type onto the smart account.
     /// @param moduleTypeId The identifier for the module type.

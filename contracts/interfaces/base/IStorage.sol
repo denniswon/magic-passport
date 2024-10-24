@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { SentinelListLib } from "sentinellist/SentinelList.sol";
@@ -22,8 +14,7 @@ import { CallType } from "../../lib/ModeLib.sol";
 /// This interface utilizes ERC-7201 storage location practices to ensure isolated and collision-resistant storage spaces within smart contracts.
 /// It is designed to support dynamic execution and modular management strategies essential for advanced smart account architectures.
 /// @custom:storage-location erc7201:magic.storage.Passport
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IStorage {
     /// @notice Struct storing validators and executors using Sentinel lists, and fallback handlers via mapping.
     struct AccountStorage {

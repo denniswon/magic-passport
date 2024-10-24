@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { PackedUserOperation } from "account-abstraction/interfaces/PackedUserOperation.sol";
@@ -18,8 +10,7 @@ import { PackedUserOperation } from "account-abstraction/interfaces/PackedUserOp
 /// @dev Provides a structure for implementing custom validation logic and execution methods that comply with ERC-4337 "account abstraction" specs.
 /// The validation method ensures proper signature and nonce verification before proceeding with transaction execution, critical for securing userOps.
 /// Also allows for the optional definition of an execution method to handle transactions post-validation, enhancing flexibility.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IERC4337Account {
     /// Validate user's signature and nonce
     /// the entryPoint will make the call to the recipient only if this validation call returns successfully.

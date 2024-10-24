@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IAccountConfig } from "./base/IAccountConfig.sol";
@@ -19,8 +11,7 @@ import { IModuleManager } from "./base/IModuleManager.sol";
 /// @notice This interface integrates the functionalities required for a modular smart account compliant with ERC-7579 and ERC-4337 standards.
 /// @dev Combines configurations and operational management for smart accounts, bridging IAccountConfig, IExecutionHelper, and IModuleManager.
 /// Interfaces designed to support the comprehensive management of smart account operations including execution management and modular configurations.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IERC7579Account is IAccountConfig, IExecutionHelper, IModuleManager {
     /// @dev Validates a smart account signature according to ERC-1271 standards.
     /// This method may delegate the call to a validator module to check the signature.

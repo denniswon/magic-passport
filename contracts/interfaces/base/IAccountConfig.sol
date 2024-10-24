@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { ExecutionMode } from "../../lib/ModeLib.sol";
@@ -16,8 +8,7 @@ import { ExecutionMode } from "../../lib/ModeLib.sol";
 /// @title Passport - ERC-7579 Account Configuration Interface
 /// @notice Interface for querying and verifying configurations of Smart Accounts compliant with ERC-7579.
 /// @dev Provides methods to check supported execution modes and module types for Smart Accounts, ensuring flexible and extensible configuration.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IAccountConfig {
     /// @notice Returns the account ID in a structured format: "vendorname.accountname.semver"
     /// @return accountImplementationId The account ID of the smart account

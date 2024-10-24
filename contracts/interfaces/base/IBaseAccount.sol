@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IBaseAccountEventsAndErrors } from "./IBaseAccountEventsAndErrors.sol";
@@ -16,8 +8,7 @@ import { IBaseAccountEventsAndErrors } from "./IBaseAccountEventsAndErrors.sol";
 /// @title Passport - IBaseAccount
 /// @notice Interface for the BaseAccount functionalities compliant with ERC-7579 and ERC-4337.
 /// @dev Interface for organizing the base functionalities using the Passport suite.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IBaseAccount is IBaseAccountEventsAndErrors {
     /// @notice Adds deposit to the EntryPoint to fund transactions.
     function addDeposit() external payable;

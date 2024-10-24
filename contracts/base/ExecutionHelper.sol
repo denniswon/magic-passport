@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { Execution } from "../types/DataTypes.sol";
@@ -21,8 +13,7 @@ import { ExecLib } from "../lib/ExecLib.sol";
 /// error handling.
 /// @dev Provides mechanisms for direct and batched transactions with both committed and tentative execution strategies
 /// as per ERC-4337 and ERC-7579 standards.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 contract ExecutionHelper is IExecutionHelperEventsAndErrors {
     using ExecLib for bytes;
 

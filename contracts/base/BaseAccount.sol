@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IEntryPoint } from "account-abstraction/interfaces/IEntryPoint.sol";
@@ -17,8 +9,7 @@ import { IBaseAccount } from "../interfaces/base/IBaseAccount.sol";
 /// @title Passport - BaseAccount
 /// @notice Implements ERC-4337 and ERC-7579 standards for account management and access control within the Passport suite.
 /// @dev Manages entry points and configurations as specified in the ERC-4337 and ERC-7579 documentation.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 contract BaseAccount is IBaseAccount {
     /// @notice Identifier for this implementation on the network
     string internal constant _ACCOUNT_IMPLEMENTATION_ID = "magic.passport.1.0.0-beta.1";

@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { SignatureCheckerLib } from "solady/utils/SignatureCheckerLib.sol";
@@ -26,8 +18,7 @@ import { MessageHashUtils } from "@openzeppelin/contracts/utils/cryptography/Mes
 ///      owners. This module supports ERC-7579 and ERC-4337 standards, ensuring only the
 ///      legitimate owner of a smart account can authorize transactions.
 ///      Implements ERC-7739
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 contract K1Validator is IValidator, ERC7739Validator {
     using SignatureCheckerLib for address;
     using EnumerableSet for EnumerableSet.AddressSet;

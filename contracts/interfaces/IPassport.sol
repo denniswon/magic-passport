@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { IERC4337Account } from "./IERC4337Account.sol";
@@ -21,8 +13,7 @@ import { IPassportEventsAndErrors } from "./IPassportEventsAndErrors.sol";
 /// It extends both IERC4337Account and IERC7579Account, enhancing modular capabilities and supporting advanced contract architectures.
 /// Includes error definitions for robust handling of common issues such as unsupported module types and execution failures.
 /// The initialize function sets up the account with validators and configurations, ensuring readiness for use.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IPassport is IERC4337Account, IERC7579Account, IPassportEventsAndErrors {
     /// @notice Initializes the smart account with a validator and custom data.
     /// @dev This method sets up the account for operation, linking it with a validator and initializing it with specific data.

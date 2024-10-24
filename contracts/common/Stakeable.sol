@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 import { Ownable } from "solady/auth/Ownable.sol";
@@ -18,8 +10,7 @@ import { IStakeable } from "../interfaces/common/IStakeable.sol";
 
 /// @title Stakeable Entity
 /// @notice Provides functionality to stake, unlock, and withdraw Ether on an EntryPoint.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 contract Stakeable is Ownable, IStakeable {
     /// @notice Error thrown when an invalid EntryPoint address is provided.
     error InvalidEntryPointAddress();

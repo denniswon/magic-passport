@@ -1,22 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-// ──────────────────────────────────────────────────────────────────────────────
-//     _   __    _  __
-//    / | / /__ | |/ /_  _______
-//   /  |/ / _ \|   / / / / ___/
-//  / /|  /  __/   / /_/ (__  )
-// /_/ |_/\___/_/|_\__,_/____/
-//
-// ──────────────────────────────────────────────────────────────────────────────
 // Passport: A suite of contracts for Modular Smart Accounts compliant with ERC-7579 and ERC-4337
 
 /// @title Passport - ERC-7579 Module Base Interface
 /// @notice Interface for module management in smart accounts, complying with ERC-7579 specifications.
 /// @dev Defines the lifecycle hooks and checks for modules within the smart account architecture.
 /// This interface includes methods for installing, uninstalling, and verifying module types and initialization status.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 interface IModule {
     /// @notice Installs the module with necessary initialization data.
     /// @dev Reverts if the module is already initialized.

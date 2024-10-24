@@ -5,8 +5,7 @@ import { BootstrapConfig } from "../utils/PassportBootstrap.sol";
 
 /// @title PassportBootstrap Configuration Library
 /// @notice Provides utility functions to create and manage BootstrapConfig structures.
-/// @author @zeroknots | Rhinestone.wtf | zeroknots.eth
-/// Special thanks to the Solady team for foundational contributions: https://github.com/Vectorized/solady
+/// Special thanks to Biconomy, Rhinestone, and Solady team for foundational contributions
 library BootstrapLib {
     /// @notice Creates a single BootstrapConfig structure.
     /// @param module The address of the module.
